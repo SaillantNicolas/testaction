@@ -1,5 +1,5 @@
 on:
-  pull_request_target:
+  issue_comment:
 
 jobs:
   emoji:
@@ -9,5 +9,5 @@ jobs:
         if: contains(github.event.comment.body, '/build:v0')
         uses: actions-cool/emoji-helper@v1.0.0
         with:
-          type: 'pr'
+          type: 'comment'
           emoji: 'rocket'
