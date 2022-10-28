@@ -5,6 +5,8 @@ jobs:
   emoji:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@v2
       - name: Find Comment
         uses: peter-evans/find-comment@v2
         id: fc
