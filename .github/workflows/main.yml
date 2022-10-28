@@ -7,9 +7,6 @@ jobs:
     runs-on: ubuntu-latest
     if: contains(github.event.comment.body, '/build:v0')
     steps:
-      - name: My action
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
       - name: emoji-comment
         uses: actions/github-script@v6
         with:
