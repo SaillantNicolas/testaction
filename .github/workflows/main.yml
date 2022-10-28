@@ -13,7 +13,7 @@ jobs:
           body-includes: '/build:v0'
           direction: desc
       - name: test
-        run: echo "${{ steps.comment.outputs }}"
+        run: echo "${{ steps.comment.outputs.comment }}"
       - name: emoji-comment
         uses: actions-cool/emoji-helper@v1.0.0
         with:
