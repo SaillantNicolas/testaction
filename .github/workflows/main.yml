@@ -8,7 +8,7 @@ jobs:
     if: contains(github.event.comment.body, '/build:v0')
     steps:
       - name: emoji-comment
-        uses: actions/github-script@v6.3.3
+        uses: actions/github-script@v6
         with:
           script: |
             github.rest.reactions.createForIssueComment({
