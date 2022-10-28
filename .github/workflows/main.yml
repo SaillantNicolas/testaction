@@ -11,7 +11,7 @@ jobs:
         uses: peter-evans/find-comment@v2
         id: fc
         with:
-          issue-number: context.issue.number
+          issue-number: 4
           body-includes: /build:v0
       - name: emoji-comment
         uses: actions-cool/emoji-helper@v1.0.0
