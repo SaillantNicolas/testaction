@@ -7,11 +7,13 @@ jobs:
     steps:
       - name: Find comments
         uses: actions-cool/issues-helper@v3
+        id: comment
         with:
           actions: 'find-comments'
+          body-includes: '/build:v0'
       - name: emoji-comment
         uses: actions-cool/emoji-helper@v1.0.0
         with:
           type: 'comment'
           emoji: 'rocket'
-          comment-id: 1294726398
+          comment-id: ${{ steps.comment.outputs.id }}
