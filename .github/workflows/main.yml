@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Emoji-comment
-      - uses: actions-cool/emoji-helper@v1.0.0
+        uses: actions-cool/emoji-helper@v1.0.0
         if: ${{contains(github.event.comment.body, '/build:v0') }}      
         with:
           type: 'comment'
