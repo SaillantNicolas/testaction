@@ -1,0 +1,15 @@
+name: remove label
+on:
+  pull_request_target:
+    types:
+      - submitted
+jobs:
+  remove_label:
+    runs-on: ubuntu-latest
+    name: remove label
+    steps:
+      - name: removelabel
+        uses: buildsville/add-remove-label@v2.0.0
+        with:
+          labels: Tested
+          type: remove
