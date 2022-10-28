@@ -1,6 +1,6 @@
 name: Emoji on Comment
 
-on: release
+on: issue_comment
 
 jobs:
   emoji:
@@ -8,5 +8,5 @@ jobs:
     steps:
       - uses: actions-cool/emoji-helper@v1.0.0
         with:
-          type: 'release'
+          type: 'comment'
           emoji: '+1, laugh, heart, hooray, rocket, eyes'
