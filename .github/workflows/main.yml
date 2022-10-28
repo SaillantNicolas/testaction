@@ -6,6 +6,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: emoji-comment
+        if: contains(github.event.comment.body, '/build:v0')
         uses: actions-cool/emoji-helper@v1.0.0
         with:
           type: 'comment'
