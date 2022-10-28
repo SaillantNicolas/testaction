@@ -5,6 +5,7 @@ on:
 jobs:
   remove_label:
     runs-on: ubuntu-latest
+    if: ${{ github.event.label.name == 'label_name' }}
     name: remove label
     steps:
       - name: removelabel
