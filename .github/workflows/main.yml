@@ -1,12 +1,13 @@
+
 on:
   issue_comment:
 
 jobs:
   emoji:
     runs-on: ubuntu-latest
+    if: contains(github.event.comment.body, '/build:v0')
     steps:
       - name: emoji-comment
-        if: contains(github.event.comment.body, '/build:v0')
         uses: actions-cool/emoji-helper@v1.0.0
         with:
           type: 'comment'
