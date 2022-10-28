@@ -11,6 +11,8 @@ jobs:
         with:
           actions: 'find-comments'
           body-includes: '/build:v0'
+      - name: test
+        run: echo ${{ steps.comment.outputs.id }}
       - name: emoji-comment
         uses: actions-cool/emoji-helper@v1.0.0
         with:
