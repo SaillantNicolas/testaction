@@ -9,11 +9,16 @@ jobs:
     name: remove label
     steps:
       - name: removelabel
-        uses: buildsville/add-remove-label@v2.0.0
+        uses: actions/github-script@v6
         with:
-          token: ${{secrets.GITHUB_TOKEN}}
-          labels: Tested
-          type: remove
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            github.rest.issues.removeLabel({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              name: "Tested",
+            });
       - name: Post address
         uses: actions/github-script@v6
         if: ${{ success() && github.event_name == 'pull_request_target' }}
