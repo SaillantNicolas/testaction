@@ -8,8 +8,13 @@ jobs:
     if: contains(github.event.comment.body, '/build:v0')
     steps:
       - name: emoji-comment
-        uses: actions-cool/emoji-helper@v1.0.0
+        uses: actions/github-script@v6.3.3
         with:
-          type: 'comment'
-          emoji: 'rocket'
-          comment-id: ${{ github.event.comment.id }}
+          script: |
+            github.rest.reactions.createForIssueComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              content: 'rocket'
+            )}
+
