@@ -5,18 +5,9 @@ jobs:
   emoji:
     runs-on: ubuntu-latest
     steps:
-      - name: Find comments
-        uses: actions-cool/issues-helper@v3
-        id: comment
-        with:
-          actions: 'find-comments'
-          body-includes: '/build:v0'
-          direction: desc
-      - name: test
-        run: echo "${{ steps.comment.outputs.comments.id }}"
       - name: emoji-comment
         uses: actions-cool/emoji-helper@v1.0.0
         with:
           type: 'comment'
           emoji: 'rocket'
-          comment-id: ${{ steps.comment.outputs.id }}
+          comment-id: ${{ github.event.comment.id }}
