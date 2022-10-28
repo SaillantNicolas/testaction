@@ -1,0 +1,14 @@
+name: Emoji on Comment
+
+on: issue_comment
+
+jobs:
+  pr_commented:
+    name: Emoji comment
+    if: ${{ github.event.issue.pull_request && startsWith(github.event.comment.body, '/build:v0') }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions-cool/emoji-helper@v1.0.0
+        with:
+          type: 'comment'
+          emoji: 'rocket'
