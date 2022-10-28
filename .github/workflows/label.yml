@@ -5,7 +5,7 @@ on:
 jobs:
   remove_label:
     runs-on: ubuntu-latest
-    if: ${{ github.event.label.name == 'Tested' }}
+    if: contains(github.event.pull_request.labels.*.name, 'Tested')
     name: remove label
     steps:
       - name: removelabel
