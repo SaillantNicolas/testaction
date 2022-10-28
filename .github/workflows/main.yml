@@ -12,6 +12,6 @@ jobs:
     steps:
       - uses: actions-cool/emoji-helper@v1.0.0
         with:
-          type: 'comment'
+          type: 'pr'
           emoji: 'rocket'
           token: '${{ secrets.GITHUB_TOKEN }}'
