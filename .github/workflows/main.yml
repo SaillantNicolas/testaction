@@ -10,7 +10,7 @@ jobs:
       - name: emoji-comment
         uses: actions/github-script@v6
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             github.rest.reactions.createForIssueComment({
               issue_number: context.issue.number,
