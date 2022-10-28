@@ -1,6 +1,6 @@
 name: remove label
 on:
-  pull_request_target:
+  pull_request_review:
     types:
       - submitted
 jobs:
