@@ -5,17 +5,13 @@ jobs:
   emoji:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Find Comment
-        uses: peter-evans/find-comment@v2
-        id: fc
+      - name: Find comments
+        uses: actions-cool/issues-helper@v3
         with:
-          issue-number: 4
-          body-includes: /build:v0
+          actions: 'find-comments'
       - name: emoji-comment
         uses: actions-cool/emoji-helper@v1.0.0
         with:
           type: 'comment'
           emoji: 'rocket'
-          comment-id: steps.fc.outputs.comment-id
+          comment-id: 1
