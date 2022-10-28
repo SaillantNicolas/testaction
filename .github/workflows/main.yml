@@ -5,9 +5,15 @@ jobs:
   emoji:
     runs-on: ubuntu-latest
     steps:
+      - name: Find Comment
+        uses: peter-evans/find-comment@v2
+        id: fc
+        with:
+          issue-number: context.issue.number
+          body-includes: /build:v0
       - name: emoji-comment
-        if: contains(github.event.comment.body, '/build:v0')
         uses: actions-cool/emoji-helper@v1.0.0
         with:
           type: 'comment'
           emoji: 'rocket'
+          comment-id: steps.fc.outputs.comment-id
