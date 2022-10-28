@@ -1,8 +1,7 @@
 name: remove label
 on:
-  pull_request_review:
-    types:
-      - submitted
+  pull_request_target:
+    types: [edited]
 jobs:
   remove_label:
     runs-on: ubuntu-latest
