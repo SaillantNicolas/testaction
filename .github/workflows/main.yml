@@ -1,16 +1,12 @@
 name: Emoji on Comment
 
-on: 
-  issue_comment:
-    types: [created,edited,deleted]
+on: release
 
 jobs:
-  pr_commented:
+  emoji:
     runs-on: ubuntu-latest
     steps:
-      - name: Emoji-comment
-        uses: actions-cool/emoji-helper@v1.0.0
-        if: ${{contains(github.event.comment.body, '/build:v0') }}      
+      - uses: actions-cool/emoji-helper@v1.0.0
         with:
-          type: 'comment'
+          type: 'release'
           emoji: '+1, laugh, heart, hooray, rocket, eyes'
