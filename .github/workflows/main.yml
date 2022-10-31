@@ -5,7 +5,7 @@ on:
 jobs:
   emoji:
     runs-on: ubuntu-latest
-    if: contains(github.event.comment.body, '/build:v0')
+    if: contains(github.event.comment.body, '/build:v')
     steps:
       - name: emoji-comment
         uses: actions/github-script@v6
