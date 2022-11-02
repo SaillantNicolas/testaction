@@ -1,5 +1,7 @@
 on: push
 
+env:
+  TEST: 4
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -8,5 +10,5 @@ jobs:
         with:
           script: |
             var test = 5
-      - run: echo ${test}
+      - run: echo $TEST
     
