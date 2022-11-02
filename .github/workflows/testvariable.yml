@@ -8,5 +8,5 @@ jobs:
         with:
           script: |
             var test = 5
-      - run: echo test
+      - run: echo $test
     
