@@ -19,5 +19,5 @@ jobs:
         id: test3
         run: |
           cat artifactid.json | jq -r '.workflow_run.id'
-      - run: echo ${{steps.test3.outputs.result }} 
+      - run: echo ${{steps.test3.outputs }} 
     
