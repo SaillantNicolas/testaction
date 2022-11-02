@@ -16,7 +16,8 @@ jobs:
         run: |
           curl "https://api.github.com/repos/SaillantNicolas/cgal-web/actions/artifacts/${{ steps.test.outputs.result }}" -o artifactid.json
       - name: testcat
+        id: test3
         run: |
           cat artifactid.json | jq -r '.workflow_run.id'
-      - run: echo ${{steps.test2.outputs.result }} 
+      - run: echo ${{steps.test3.outputs.result }} 
     
