@@ -7,8 +7,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/github-script@v6
+        id: test
         with:
           script: |
-            ${{ $TEST }} = 5
-      - run: echo $TEST
+            return 5
+      - run: echo "${{steps.test.outputs.result}}"
     
