@@ -10,6 +10,8 @@ jobs:
         id: test
         with:
           script: |
-            return 5
-      - run: echo "${{steps.test.outputs.result}}"
+            return 421094206
+      - name: getWorkflowId
+        run: |
+          curl https://api.github.com/repos/SaillantNicolas/cgal-web/actions/artifacts/${{ steps.test.outputs.result }} | jq -r '.workflow_run.id'
     
