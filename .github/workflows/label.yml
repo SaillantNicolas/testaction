@@ -1,7 +1,7 @@
 name: remove label
 on:
   pull_request_target:
-    types: [synchronize]
+    types: [synchronize,labeled]
 jobs:
   remove_label:
     runs-on: ubuntu-latest
