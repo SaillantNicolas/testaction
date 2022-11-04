@@ -23,7 +23,7 @@ jobs:
      #     cat artifact.json >> $GITHUB_ENV
      #     echo 'EOF' >> $GITHUB_ENV
       - name: paste
-        run: echo "${{steps.testoutput.output.DoxygenError}}"
+        run: echo "${{steps.testoutput.outputs.DoxygenError}}"
 
       - name: getPrId
         id: prid
