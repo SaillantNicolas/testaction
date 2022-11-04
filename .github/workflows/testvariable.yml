@@ -1,7 +1,4 @@
 on: push
-
-env:
-  TEST: 4
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -23,7 +20,7 @@ jobs:
           cat artifact.json >> $GITHUB_ENV
           echo 'EOF' >> $GITHUB_ENV
       - name: paste
-        run: echo "${{steps.testenv.outputs.DoxygenError}}"
+        run: echo "${{env.GITHUB_ENV}}"
 
       - name: getPrId
         id: prid
