@@ -13,7 +13,9 @@ jobs:
         run: |
           curl "https://api.github.com/repos/SaillantNicolas/cgal-web/actions/artifacts/${{ steps.test.outputs.result }}" -o artifact.json
           echo "::set-output name=id::$(cat artifact.json | jq -r '.workflow_run.id')"
-      - run: echo "DoxygenError=No package affected." >> $GITHUB_ENV
+      - name: githuboutput
+        id: testoutput
+        run: echo "DoxygenError=No package affected." >> $GITHUB_OUTPUT
      # - name: copy
      #   id: testenv
      #   run: |
@@ -21,7 +23,7 @@ jobs:
      #     cat artifact.json >> $GITHUB_ENV
      #     echo 'EOF' >> $GITHUB_ENV
       - name: paste
-        run: echo "${{env.DoxygenError}}"
+        run: echo "${{steps.testoutput.output.DoxygenError}}"
 
       - name: getPrId
         id: prid
