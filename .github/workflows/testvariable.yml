@@ -25,7 +25,7 @@ jobs:
           cat artifact.json >> "${GITHUB_OUTPUT}"
           echo "${delimiter}" >> "${GITHUB_OUTPUT}"
       - name: paste
-        run: echo "${{ steps.testenv.outputs.DoxygenError}}"
+        run: echo "${{ steps.testoutput.outputs.DoxygenError}}"
 
       - name: getPrId
         id: prid
