@@ -19,9 +19,10 @@ jobs:
       - name: copy
         id: testenv
         run: |
-         echo 'DoxygenError<<EOF' >> "$(GITHUB_OUTPUT)"
-          cat artifact.json >> "$(GITHUB_OUTPUT)"
-          echo 'EOF' >> "$(GITHUB_OUTPUT)"
+          delimiter="$(openssl rand -hex 8)"
+          echo "DoxygenError<<${delimiter}" >> "${GITHUB_OUTPUT}"
+          cat artifact.json >> "${GITHUB_OUTPUT}"
+          echo "${delimiter}" >> "${GITHUB_OUTPUT}"
       - name: paste
         run: echo "${{ steps.testenv.outputs.DoxygenError}}"
 
