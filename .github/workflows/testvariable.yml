@@ -16,6 +16,16 @@ jobs:
         run: |
           curl "https://api.github.com/repos/SaillantNicolas/cgal-web/actions/artifacts/${{ steps.test.outputs.result }}" -o artifact.json
           echo "::set-output name=id::$(cat artifact.json | jq -r '.workflow_run.id')"
+      - name: copy
+        run: |
+          echo 'CONTENT_ENV<<EOF' >> $GITHUB_ENV
+          cat artifact.json >> $GITHUB_ENV
+          echo 'EOF' >> $GITHUB_ENV
+      - name: paste
+        run: echo "$CONTENT_ENV" > index.md
+      - name: test
+        run: cat index.md
+
       - name: getPrId
         id: prid
         run: |
