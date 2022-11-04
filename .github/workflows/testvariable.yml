@@ -16,14 +16,14 @@ jobs:
       - name: githuboutput
         id: testoutput
         run: echo "DoxygenError=No package affected." >> $GITHUB_OUTPUT
-     # - name: copy
-     #   id: testenv
-     #   run: |
-     #     echo 'DoxygenError<<EOF' >> $GITHUB_ENV
-     #     cat artifact.json >> $GITHUB_ENV
-     #     echo 'EOF' >> $GITHUB_ENV
+      - name: copy
+        id: testenv
+        run: |
+         echo 'DoxygenError<<EOF' >> "$(GITHUB_OUTPUT)"
+          cat artifact.json >> "$(GITHUB_OUTPUT)"
+          echo 'EOF' >> "$(GITHUB_OUTPUT)"
       - name: paste
-        run: echo "$DoxygenError"
+        run: echo "${{ steps.testenv.outputs.DoxygenError}}"
 
       - name: getPrId
         id: prid
