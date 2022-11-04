@@ -7,15 +7,14 @@ jobs:
     runs-on: ubuntu-latest
     if: contains(github.event.comment.body, '/build:v')
     steps:
-      - name: emoji-comment
-        uses: actions/github-script@v6
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            github.rest.reactions.createForIssueComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              content: 'rocket'
-            })
+      - name: copy
+        run: |
+          echo 'CONTENT_ENV<<EOF' >> $GITHUB_ENV
+          cat README.md >> $GITHUB_ENV
+          echo 'EOF' >> $GITHUB_ENV
+      - name: paste
+        run: echo "$CONTENT_ENV" > index.md
+      - name: test
+        run: cat index.md
+
 
