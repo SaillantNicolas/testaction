@@ -20,6 +20,7 @@ jobs:
         id: testenv
         run: |
           delimiter="$(openssl rand -hex 8)"
+          echo "${delimiter}"
           echo "DoxygenError<<${delimiter}" >> "${GITHUB_OUTPUT}"
           cat artifact.json >> "${GITHUB_OUTPUT}"
           echo "${delimiter}" >> "${GITHUB_OUTPUT}"
