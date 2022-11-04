@@ -20,12 +20,11 @@ jobs:
         id: testenv
         run: |
           delimiter="$(openssl rand -hex 8)"
-          echo "${delimiter}"
           echo "DoxygenError<<${delimiter}" >> "${GITHUB_OUTPUT}"
           cat artifact.json >> "${GITHUB_OUTPUT}"
           echo "${delimiter}" >> "${GITHUB_OUTPUT}"
       - name: paste
-        run: echo "${{ steps.testoutput.outputs.DoxygenError}}"
+        run: echo "${{ steps.testenv.outputs.DoxygenError}}"
 
       - name: getPrId
         id: prid
