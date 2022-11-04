@@ -15,7 +15,7 @@ jobs:
           echo "::set-output name=id::$(cat artifact.json | jq -r '.workflow_run.id')"
       - name: githuboutput
         id: testoutput
-        run: echo "DoxygenError=No package affected." >> $GITHUB_OUTPUT
+        run: echo "DoxygenError=$(No package affected.)" >> $GITHUB_OUTPUT
      # - name: copy
      #   id: testenv
      #   run: |
