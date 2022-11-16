@@ -44,5 +44,5 @@ jobs:
               owner: "CGAL",
               repo: "cgal",
               issue_number: ${{ github.event.issue.number }},
-              body: msg
+              body: `msg`
             });
