@@ -39,10 +39,10 @@ jobs:
         with:
           script: |
             const error = "${{steps.testenv.outputs.DoxygenError}}"
-            const msg = "There was an error while building the doc: \n"+error
+            const msg = "There was an error while building the doc: \n"+`error`
             github.rest.issues.createComment({
               owner: "CGAL",
               repo: "cgal",
               issue_number: ${{ github.event.issue.number }},
-              body: `msg`
+              body: msg
             });
