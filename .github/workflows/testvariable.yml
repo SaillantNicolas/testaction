@@ -40,10 +40,10 @@ jobs:
         if: ${{ failure() && steps.get_round.outputs.result != 'stop' }}
         with:
           script: |
-            const error = "warning: tag INPUT: input source `/home/runner/work/cgal/cgal/Mesh_3/include//CGAL/Detect_features_in_image.h' does not exist
+            const error = `"warning: tag INPUT: input source `/home/runner/work/cgal/cgal/Mesh_3/include//CGAL/Detect_features_in_image.h' does not exist
                           warning: tag INPUT: input source `/home/runner/work/cgal/cgal/Mesh_3/include//CGAL/Detect_features_on_image_bbox.h' does not exist
                           warning: source /home/runner/work/cgal/cgal/Mesh_3/include//CGAL/Detect_features_in_image.h is not a readable file or directory... skipping.
-                          warning: source /home/runner/work/cgal/cgal/Mesh_3/include//CGAL/Detect_features_on_image_bbox.h is not a readable file or directory... skipping."
+                          warning: source /home/runner/work/cgal/cgal/Mesh_3/include//CGAL/Detect_features_on_image_bbox.h is not a readable file or directory... skipping."`
             const msg = "There was an error while building the doc: \n"+error
             github.rest.issues.createComment({
               owner: context.repo.owner,
