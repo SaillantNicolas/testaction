@@ -1,6 +1,8 @@
 on: issue_comment
 jobs:
   test:
+    permissions:
+      pull-requests: write # to create comment
     runs-on: ubuntu-latest
     steps:
       - uses: actions/github-script@v6
