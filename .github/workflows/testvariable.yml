@@ -38,8 +38,8 @@ jobs:
         if: ${{ failure() && steps.get_round.outputs.result != 'stop' }}
         with:
           script: |
-            const error = "${{steps.testenv.outputs.DoxygenError}}"
-            const msg = "There was an error while building the doc: \n"+`error`
+            const error = `${{steps.testenv.outputs.DoxygenError}}`
+            const msg = "There was an error while building the doc: \n"+error
             github.rest.issues.createComment({
               owner: "CGAL",
               repo: "cgal",
