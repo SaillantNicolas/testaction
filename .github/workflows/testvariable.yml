@@ -6,7 +6,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: |
-          echo "warning: tag INPUT: input source `/home/runner/work/cgal/cgal/Mesh_3/include//CGAL/Detect_features_in_image.h'' does not exist
+          echo " test
+                warning: tag INPUT: input source `/home/runner/work/cgal/cgal/Mesh_3/include//CGAL/Detect_features_in_image.h'' does not exist
                 warning: tag INPUT: input source `/home/runner/work/cgal/cgal/Mesh_3/include//CGAL/Detect_features_on_image_bbox.h'' does not exist
                 warning: source /home/runner/work/cgal/cgal/Mesh_3/include//CGAL/Detect_features_in_image.h is not a readable file or directory... skipping.
                 warning: source /home/runner/work/cgal/cgal/Mesh_3/include//CGAL/Detect_features_on_image_bbox.h is not a readable file or directory... skipping." > test.txt
@@ -23,11 +24,13 @@ jobs:
       - name: paste
         run: echo "${{ steps.testenv.outputs.DoxygenError}}"
       - name: Post error
+        env: 
+          ERRORMSG: ${{steps.testenv.outputs.DoxygenError}}
         uses: actions/github-script@v6
         if: ${{ failure() && steps.get_round.outputs.result != 'stop' }}
         with:
           script: |
-            const error = `${{steps.testenv.outputs.DoxygenError}}``
+            const error = `${ERRORMSG}`
             const msg = "There was an error while building the doc: \n"+error
             github.rest.issues.createComment({
               owner: context.repo.owner,
