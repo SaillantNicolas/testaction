@@ -7,10 +7,10 @@ jobs:
     steps:
       - run: |
           echo " test
-                warning: tag INPUT: input source `/home/runner/work/cgal/cgal/Mesh_3/include//CGAL/Detect_features_in_image.h'' does not exist
-                warning: tag INPUT: input source `/home/runner/work/cgal/cgal/Mesh_3/include//CGAL/Detect_features_on_image_bbox.h'' does not exist
-                warning: source /home/runner/work/cgal/cgal/Mesh_3/include//CGAL/Detect_features_in_image.h is not a readable file or directory... skipping.
-                warning: source /home/runner/work/cgal/cgal/Mesh_3/include//CGAL/Detect_features_on_image_bbox.h is not a readable file or directory... skipping." > test.txt
+                'warning: tag INPUT: input source `/home/runner/work/cgal/cgal/Mesh_3/include//CGAL/Detect_features_in_image.h'\'' does not exist
+                 warning: tag INPUT: input source `/home/runner/work/cgal/cgal/Mesh_3/include//CGAL/Detect_features_on_image_bbox.h'\'' does not exist
+                 warning: source /home/runner/work/cgal/cgal/Mesh_3/include//CGAL/Detect_features_in_image.h is not a readable file or directory... skipping.
+                 warning: source /home/runner/work/cgal/cgal/Mesh_3/include//CGAL/Detect_features_on_image_bbox.h is not a readable file or directory... skipping.'" > test.txt
       - run: |
           cat test.txt
       - name: copy
