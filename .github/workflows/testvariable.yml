@@ -5,15 +5,17 @@ jobs:
       pull-requests: write # to create comment
     runs-on: ubuntu-latest
     steps:
+      - run: |
+          echo "warning: tag INPUT: input source `/home/runner/work/cgal/cgal/Mesh_3/include//CGAL/Detect_features_in_image.h'' does not exist
+                warning: tag INPUT: input source `/home/runner/work/cgal/cgal/Mesh_3/include//CGAL/Detect_features_on_image_bbox.h'' does not exist
+                warning: source /home/runner/work/cgal/cgal/Mesh_3/include//CGAL/Detect_features_in_image.h is not a readable file or directory... skipping.
+                warning: source /home/runner/work/cgal/cgal/Mesh_3/include//CGAL/Detect_features_on_image_bbox.h is not a readable file or directory... skipping." > test.txt
       - name: copy
         id: testenv
         run: |
           delimiter="$(openssl rand -hex 8)"
           echo "DoxygenError<<${delimiter}" >> "${GITHUB_OUTPUT}"
-          echo warning: tag INPUT: input source `/home/runner/work/cgal/cgal/Mesh_3/include//CGAL/Detect_features_in_image.h'' does not exist
-                warning: tag INPUT: input source `/home/runner/work/cgal/cgal/Mesh_3/include//CGAL/Detect_features_on_image_bbox.h'' does not exist
-                warning: source /home/runner/work/cgal/cgal/Mesh_3/include//CGAL/Detect_features_in_image.h is not a readable file or directory... skipping.
-                warning: source /home/runner/work/cgal/cgal/Mesh_3/include//CGAL/Detect_features_on_image_bbox.h is not a readable file or directory... skipping. >> "${GITHUB_OUTPUT}"
+          cat test.txt >> "${GITHUB_OUTPUT}"
           echo "${delimiter}" >> "${GITHUB_OUTPUT}"
           exit 1
       - name: paste
