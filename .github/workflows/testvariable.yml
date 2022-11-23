@@ -28,8 +28,8 @@ jobs:
         if: ${{ failure() && steps.get_round.outputs.result != 'stop' }}
         with:
           script: |
-            const error = process.env.ERRORMSG
-            const msg = "There was an error while building the doc: \n"+`error`
+            const error = process.env.`ERRORMSG`
+            const msg = "There was an error while building the doc: \n"+error
             github.rest.issues.createComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
