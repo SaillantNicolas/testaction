@@ -21,8 +21,6 @@ jobs:
           cat test.txt >> "${GITHUB_OUTPUT}"
           echo "${delimiter}" >> "${GITHUB_OUTPUT}"
           exit 1
-      - name: paste
-        run: echo "${{ steps.testenv.outputs.DoxygenError}}"
       - name: Post error
         env: 
           ERRORMSG: ${{steps.testenv.outputs.DoxygenError}}
@@ -30,8 +28,7 @@ jobs:
         if: ${{ failure() && steps.get_round.outputs.result != 'stop' }}
         with:
           script: |
-            const { ERRORMSG } = process.env
-            const error = `${ERRORMSG}`
+            const error = process.env.ERRORMSG
             const msg = "There was an error while building the doc: \n"+error
             github.rest.issues.createComment({
               owner: context.repo.owner,
