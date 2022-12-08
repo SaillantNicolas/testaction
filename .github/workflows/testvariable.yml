@@ -1,4 +1,6 @@
-on: issue_comment
+on:
+  pull_request_review:
+    types: [commented]
 env:
   test: | 
           "'warning: tag INPUT: input source `/home/runner/work/cgal/cgal/Mesh_3/include//CGAL/Detect_features_in_image.h'\'' does not exist
