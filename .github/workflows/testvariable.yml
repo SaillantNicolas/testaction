@@ -1,5 +1,5 @@
 name: Documentation
-run-name: Deploy to ${{ inputs.deploy_target }} by @${{ github.actor }}
+run-name: Deploy Documentation by @${{ github.actor }}
 
 on:
   issue_comment:
