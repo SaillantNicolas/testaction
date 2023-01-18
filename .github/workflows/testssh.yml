@@ -1,5 +1,5 @@
 name: ssh
-on: [push]
+on: [push,workflow_dispatch]
 
 jobs:
   ssh:
