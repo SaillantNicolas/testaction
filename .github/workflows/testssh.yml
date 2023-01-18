@@ -1,0 +1,11 @@
+name: ssh
+on: [push]
+
+jobs:
+  ssh:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: ls
+        run:  ls
