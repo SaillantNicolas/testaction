@@ -18,3 +18,5 @@ jobs:
           ssh-keyscan -H ${{ secrets.SSH_HOST }} > ~/.ssh/known_hosts
       - name: rsync
         run: rsync -avnz ./testrsync.html ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/home/${{ secrets.SSH_USER }}/public_html
+      - name: cleanup
+        run: rm -rf ~/.ssh
