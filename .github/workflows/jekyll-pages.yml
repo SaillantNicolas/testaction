@@ -49,7 +49,7 @@ jobs:
               fs.writeFileSync('${{github.workspace}}/pr_number.zip', Buffer.from(download.data));
               return matchArtifact.id
         - name: get Pr number
-            run:unzip pr_number.zip
+          run: unzip pr_number.zip
         - name: Post address
           uses: actions/github-script@v6
           if: ${{ success()}}
