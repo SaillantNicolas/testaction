@@ -53,35 +53,27 @@ jobs:
           run: |
             unzip pr_number.zip
             echo "number=$(cat pr_number.txt)" >> $GITHUB_OUTPUT
-            echo "$(cat pr_number.txt)"
-        - run: echo "${{steps.prnumber.outputs.number}}"
         - name: Post address
-          env:
-            MSG: ${{steps.prnumber.outputs.number}}
           uses: actions/github-script@v6
           if: ${{ success()}}
           with:
            github-token: ${{ secrets.GITHUB_TOKEN }}
            script: |
-            const pr_number = process.env.MSG
             github.rest.issues.createComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
               body: "The web-site is built. It will be available, after a few minutes, here: https://cgal.github.io/cgal-web/index.html",
-              issue_number: pr_number
+              issue_number: ${{steps.prnumber.outputs.number}}
             });
         - name: Post error
-          env:
-            MSG: ${{steps.prnumber.outputs.number}}
           uses: actions/github-script@v6
           if: ${{ failure()}}
           with:
            github-token: ${{ secrets.GITHUB_TOKEN }}
            script: |
-            const pr_number = process.env.MSG
             github.rest.issues.createComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
               body: "There was an error while building the web-site",
-              issue_number: pr_number
+              issue_number: ${{steps.prnumber.outputs.number}}
             });
