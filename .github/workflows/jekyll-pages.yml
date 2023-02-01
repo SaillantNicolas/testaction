@@ -28,7 +28,6 @@ jobs:
       github.event.workflow_run.conclusion == 'success'
     steps: 
         - name: get PR number
-          id: prnumber
           uses: actions/github-script@v6
           with:
             script: |
@@ -50,6 +49,7 @@ jobs:
               fs.writeFileSync('${{github.workspace}}/pr_number.zip', Buffer.from(download.data));
               return matchArtifact.id
         - name: get Pr number
+          id: prnumber
           run: |
             unzip pr_number.zip
             echo "number=$(cat pr_number.txt)" >> $GITHUB_OUTPUT
