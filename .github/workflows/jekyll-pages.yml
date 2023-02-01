@@ -63,7 +63,7 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               body: "The web-site is built. It will be available, after a few minutes, here: https://cgal.github.io/cgal-web/index.html",
-              issue_number: ${{ steps.prnumber.outputs.number }}
+              issue_number: ${{steps.prnumber.outputs.number}}
             });
         - name: Post error
           uses: actions/github-script@v6
@@ -75,5 +75,5 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               body: "There was an error while building the web-site",
-              issue_number: ${{ steps.prnumber.outputs.number }}
+              issue_number: ${{steps.prnumber.outputs.number}}
             });
