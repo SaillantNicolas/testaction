@@ -53,6 +53,7 @@ jobs:
           run: |
             unzip pr_number.zip
             echo "number=$(cat pr_number.txt)" >> $GITHUB_OUTPUT
+            echo "$(cat pr_number.txt)"
         - run: echo "${{steps.prnumber.outputs.number}}"
         - name: Post address
           env:
