@@ -46,10 +46,10 @@ jobs:
                  archive_format: 'zip',
               });
               var fs = require('fs');
-              fs.writeFileSync('${{github.workspace}}/pr_number.zip', Buffer.from(download.data));
+              fs.writeFileSync('${{github.workspace}}/number.zip', Buffer.from(download.data));
               return matchArtifact.id
         - run: |
-            unzip pr_number.zip
+            unzip number.zip
             unzip pr_number.zip
             echo "PR number is $(cat pr_number.txt)"
         - name: Post address
