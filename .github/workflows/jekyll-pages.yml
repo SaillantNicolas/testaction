@@ -48,20 +48,19 @@ jobs:
               var fs = require('fs');
               fs.writeFileSync('${{github.workspace}}/pr_number.zip', Buffer.from(download.data));
               return matchArtifact.id
-        - run: |
-            unzip pr_number.zip
-            ls
-            echo "PR number is $(cat pr_number.txt)"
+        - name: get Pr number
+            run:unzip pr_number.zip
         - name: Post address
           uses: actions/github-script@v6
           if: ${{ success()}}
           with:
            github-token: ${{ secrets.GITHUB_TOKEN }}
            script: |
+            const pr_number = $(cat pr_number.txt);
             github.rest.issues.createComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              issue_number: ${{ steps.prid.outputs.id }},
+              issue_number: pr_number,
               body: "The web-site is built. It will be available, after a few minutes, here: https://cgal.github.io/cgal-web/index.html"
             });
         - name: Post error
@@ -70,9 +69,10 @@ jobs:
           with:
            github-token: ${{ secrets.GITHUB_TOKEN }}
            script: |
+            const pr_number = $(cat pr_number.txt);
             github.rest.issues.createComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              issue_number: ${{ steps.prid.outputs.id }},
+              issue_number: pr_number,
               body: "There was an error while building the web-site"
             });
