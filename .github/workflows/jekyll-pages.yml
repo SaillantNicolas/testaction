@@ -50,7 +50,7 @@ jobs:
               return matchArtifact.id
         - run: |
             unzip pr_number.zip
-            ls
+            unzip pr_number.zip
             echo "PR number is $(cat pr_number.txt)"
         - name: Post address
           uses: actions/github-script@v6
