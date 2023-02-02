@@ -1,5 +1,5 @@
 name: Receive_PR
-on: [pull_request,workflow_dispatch]
+on: [workflow_dispatch]
 
 concurrency:
   group: "pages"
