@@ -7,11 +7,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Connect to Remote Host
-      uses: actions/ssh-action@v1
-      with:
-        host: ${{ vars.SSH_HOST }}
-        username: ${{ secrets.SSH_USER }}
-        key: ${{ secrets.SSH_PRIVATE_KEY }}
-        script: |
-          ssh ${{ secrets.SSH_USER }}@${{ vars.SSH_HOST }} "./script.sh"
+    - name: install ssh keys
+      run: |
+        install -m 600 -D /dev/null ~/.ssh/id_rsa
+        echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+        ssh-keyscan -H ${{ vars.SSH_HOST }} > ~/.ssh/known_hosts
+    - name: run script
+      run: |
+        ssh ${{ secrets.SSH_USER }}@${{ vars.SSH_HOST }} "script.sh"
