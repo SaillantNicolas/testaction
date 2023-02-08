@@ -14,4 +14,4 @@ jobs:
         ssh-keyscan -H ${{ vars.SSH_HOST }} > ~/.ssh/known_hosts
     - name: run script
       run: |
-        ssh ${{ secrets.SSH_USER }}@${{ vars.SSH_HOST }} "script.sh"
+        ssh ${{ secrets.SSH_USER }}@${{ vars.SSH_HOST }} "./script.sh"
