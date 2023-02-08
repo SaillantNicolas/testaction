@@ -14,4 +14,4 @@ jobs:
         username: ${{ secrets.SSH_USER }}
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         script: |
-          ssh ${{ secrets.SSH_USER }}@${{ vars.SSH_HOST }} "./your_script.sh"
+          ssh ${{ secrets.SSH_USER }}@${{ vars.SSH_HOST }} "./script.sh"
