@@ -41,24 +41,17 @@ jobs:
       run: |
         count=$(cat event.json | jq  '.payload.pages | length')
         date=$(cat event.json | jq '.created_at' | tr -d '"')
-        messages=""
         for ((i=0; i<$count; i++)); do
           action=$(cat event.json | jq '.payload.pages['$i'].action' | tr -d '"')
           wiki_page=$(cat event.json | jq '.payload.pages['$i'].title' | tr -d '"')
           page_url=$(cat event.json | jq '.payload.pages['$i'].html_url' | tr -d '"')
-
-          message="
-            Page $i
-            Actor: ${{ steps.actor.outputs.actor }}
-            Action: $action
-            Wiki Page: $wiki_page
-            Page URL: $page_url
-            Date: $date
-            "
-          messages="$messages$message"
+          echo "Page $i" >> messages.txt
+          echo "Actor : ${{ steps.actor.outputs.actor }}" >> messages.txt
+          echo "Action $action" >> messages.txt
+          echo "Wiki Page : $wiki_page" >> messages.txt
+          echo "Page URL : $page_url" >> messages.txt
+          echo "Date : $date" >> messages.txt
         done
-        echo $message
-        echo $messages >> messages.txt
         
     - name: install ssh keys
       run: |
