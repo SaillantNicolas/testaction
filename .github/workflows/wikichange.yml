@@ -20,7 +20,6 @@ jobs:
         echo "eventcount=$eventcount" >> $GITHUB_OUTPUT
 
     - name: Boucle pour traiter les événements
-      id: event
       run: |
         for ((i=${{ steps.event_count.outputs.eventcount }}; i>=0; i--)); do
           if [ "$(cat response.json | jq -r '.['$i'].type')" == "GollumEvent" ];
@@ -40,12 +39,10 @@ jobs:
       id: pages_count
       run: |
         pagescount=$(cat event.json | jq '.payload.pages | length')
-        cat event.json
         cat event.json | jq '.payload.pages | length'
         echo "pagescount=$pagescount" >> $GITHUB_OUTPUT
 
     - name: Boucle pour traiter les pages du wiki
-      id: messages
       run: |
         date=$(cat event.json | jq '.created_at' | tr -d '"')
         echo -e "Subject:Wiki Change $date \n" >> messages.txt
@@ -68,5 +65,4 @@ jobs:
         ssh-keyscan -H ${{ vars.SSH_HOST }} > ~/.ssh/known_hosts
     - name: run script
       run: |
-        ls
         cat messages.txt | ssh ${{ secrets.SSH_USER }}@${{ vars.SSH_HOST }} "/sbin/sendmail -t saillantnicolas01@gmail.com"
