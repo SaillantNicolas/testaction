@@ -40,6 +40,7 @@ jobs:
       id: pages_count
       run: |
         pagescount=$(cat event.json | jq '.payload.pages | length')
+        cat event.json
         cat event.json | jq '.payload.pages | length'
         echo "pagescount=$pagescount" >> $GITHUB_OUTPUT
 
