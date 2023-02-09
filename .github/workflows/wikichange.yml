@@ -16,15 +16,15 @@ jobs:
       id: event_count
       run: |
         eventcount=$(cat response.json | jq '. | length')
-        echo "eventcount=$eventcount" >> $GITHUB_OUTPUT
+        echo "eventcount=${eventcount}" >> $GITHUB_OUTPUT
 
     - name: Boucle pour traiter les événements
       id: event
       run: |
         for ((i=0; i<${{ steps.event_count.outputs.eventcount }}; i++)); do
-          if [ "$(cat response.jso | jq -r '.['$i'].type')" == "GollumEvent" ];
+          if [ "$(cat response.json | jq -r '.['$i'].type')" == "GollumEvent" ];
           then
-            event=$(cat response.jso | jq '.[0]')
+            event=$(cat response.json | jq '.[0]')
           fi
         done
         echo "event=$event" >> $GITHUB_OUTPUT
