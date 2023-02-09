@@ -48,6 +48,7 @@ jobs:
       id: messages
       run: |
         date=$(cat event.json | jq '.created_at' | tr -d '"')
+        echo -e "Subject:Wiki Change \n" >> messages.txt
         for ((i=0; i<${{ steps.pages_count.outputs.pagescount }}; i++)); do
           action=$(cat event.json | jq '.payload.pages['$i'].action' | tr -d '"')
           wiki_page=$(cat event.json | jq '.payload.pages['$i'].title' | tr -d '"')
