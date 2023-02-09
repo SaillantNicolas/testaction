@@ -34,19 +34,18 @@ jobs:
       id: actor
       run: |
         actor=$(cat event.json | jq '.actor.login' | tr -d '"')
-        cat event.json | jq '.actor.login' | tr -d '"'
-        echo "actor=$actor" >> $GITUB_OUTPUT
+        echo "actor=$actor" >> $GITHUB_OUTPUT
 
     - name: Boucle pour traiter les pages du wiki
       id: messages
       run: |
-        count=$(echo "${{ steps.event.outputs.event }}" | jq  '.payload.pages | length')
-        date=$(echo "${{ steps.event.outputs.event }}" | jq '.created_at' | tr -d '"')
+        count=$(cat event.json | jq  '.payload.pages | length')
+        date=$(cat event.json | jq '.created_at' | tr -d '"')
         messages=""
         for ((i=0; i<$count; i++)); do
-          action=$(echo "${{ steps.event.outputs.event }}" | jq '.payload.pages['$i'].action' | tr -d '"')
-          wiki_page=$(echo "${{ steps.event.outputs.event }}" | jq '.payload.pages['$i'].title' | tr -d '"')
-          page_url=$(echo "${{ steps.event.outputs.event }}" | jq '.payload.pages['$i'].html_url' | tr -d '"')
+          action=$(cat event.json | jq '.payload.pages['$i'].action' | tr -d '"')
+          wiki_page=$(cat event.json | jq '.payload.pages['$i'].title' | tr -d '"')
+          page_url=$(cat event.json | jq '.payload.pages['$i'].html_url' | tr -d '"')
 
           message="
             Page $i
