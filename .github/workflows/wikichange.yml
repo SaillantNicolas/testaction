@@ -22,9 +22,9 @@ jobs:
       id: event
       run: |
         for ((i=0; i<${{ steps.event_count.outputs.eventcount }}; i++)); do
-          if [ "$(echo "${{ steps.response.outputs.response }}" | jq -r '.['$i'].type')" == "GollumEvent" ];
+          if [ "$(cat response.jso | jq -r '.['$i'].type')" == "GollumEvent" ];
           then
-            event=$(echo "${{ steps.response.outputs.response }}" | jq '.[0]')
+            event=$(cat response.jso | jq '.[0]')
           fi
         done
         echo "event=$event" >> $GITHUB_OUTPUT
