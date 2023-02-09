@@ -7,6 +7,58 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - name: Obtenir la réponse de l'API
+      id: response
+      run: |
+        response=$(curl -s https://api.github.com/repos/saillantnicolas/testaction/events)
+        echo "response=$response" >> $GITHUB_OUTPUT
+
+    - name: Déterminer le nombre d'événements
+      id: event_count
+      run: |
+        eventcount=$(echo "${{ steps.response.outputs.response }}" | jq '. | length')
+        echo "eventcount=$eventcount" >> $GITHUB_OUTPUT
+
+    - name: Boucle pour traiter les événements
+      id: event
+      run: |
+        for ((i=0; i<${{ steps.event_count.outputs.eventcount }}; i++)); do
+          if [ "$(echo "${{ steps.response.outputs.response }}" | jq -r '.['$i'].type')" == "GollumEvent" ];
+          then
+            event=$(echo "${{ steps.response.outputs.response }}" | jq '.[0]')
+          fi
+        done
+        echo "event=$event" >> $GITHUB_OUTPUT
+
+    - name: Obtenir le nom d'utilisateur de l'acteur
+      id: actor
+      run: |
+        actor=$(echo "${{ steps.event.outputs.event }}" | jq '.actor.login' | tr -d '"')
+        echo "actor=$actor" >> $GITUB_OUTPUT
+
+    - name: Boucle pour traiter les pages du wiki
+      id: messages
+      run: |
+        count=$(echo "${{ steps.event.outputs.event }}" | jq  '.payload.pages | length')
+        date=$(echo "${{ steps.event.outputs.event }}" | jq '.created_at' | tr -d '"')
+        messages=""
+        for ((i=0; i<$count; i++)); do
+          action=$(echo "${{ steps.event.outputs.event }}" | jq '.payload.pages['$i'].action' | tr -d '"')
+          wiki_page=$(echo "${{ steps.event.outputs.event }}" | jq '.payload.pages['$i'].title' | tr -d '"')
+          page_url=$(echo "${{ steps.event.outputs.event }}" | jq '.payload.pages['$i'].html_url' | tr -d '"')
+
+          message="
+            Page $i
+            Actor: ${{ steps.actor.outputs.actor }}
+            Action: $action
+            Wiki Page: $wiki_page
+            Page URL: $page_url
+            Date: $date
+            "
+          messages="$messages$message"
+        done
+        echo "messages=$messages" >> $GITHUB_OUTPUT
+        
     - name: install ssh keys
       run: |
         install -m 600 -D /dev/null ~/.ssh/id_rsa
@@ -14,4 +66,4 @@ jobs:
         ssh-keyscan -H ${{ vars.SSH_HOST }} > ~/.ssh/known_hosts
     - name: run script
       run: |
-        ssh ${{ secrets.SSH_USER }}@${{ vars.SSH_HOST }} "./script.sh"
+        echo "${{ steps.messages.outputs.messages }}" | ssh ${{ secrets.SSH_USER }}@${{ vars.SSH_HOST }} "/sbin/sendmail -t saillantnicolas01@gmail.com"
