@@ -57,7 +57,7 @@ jobs:
             "
           messages="$messages$message"
         done
-        echo $messages
+        echo $message
         echo $messages >> messages.txt
         
     - name: install ssh keys
@@ -68,4 +68,4 @@ jobs:
     - name: run script
       run: |
         cat messages.txt
-        cat messages.txt | ssh ${{ secrets.SSH_USER }}@${{ vars.SSH_HOST }} "/sbin/sendmail -t saillantnicolas01@gmail.com"
+        #cat messages.txt | ssh ${{ secrets.SSH_USER }}@${{ vars.SSH_HOST }} "/sbin/sendmail -t saillantnicolas01@gmail.com"
