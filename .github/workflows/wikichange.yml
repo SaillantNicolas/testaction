@@ -52,12 +52,12 @@ jobs:
           action=$(cat event.json | jq '.payload.pages['$i'].action' | tr -d '"')
           wiki_page=$(cat event.json | jq '.payload.pages['$i'].title' | tr -d '"')
           page_url=$(cat event.json | jq '.payload.pages['$i'].html_url' | tr -d '"')
-          echo "Page $i\n" >> messages.txt
+          echo "Page $i" >> messages.txt
           echo "Actor : ${{ steps.actor.outputs.actor }}" >> messages.txt
           echo "Action $action" >> messages.txt
           echo "Wiki Page : $wiki_page" >> messages.txt
           echo "Page URL : $page_url" >> messages.txt
-          echo "Date : $date \n" >> messages.txt
+          echo "Date : $date" >> messages.txt
         done
         
     - name: install ssh keys
