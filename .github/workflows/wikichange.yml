@@ -60,5 +60,6 @@ jobs:
         ssh-keyscan -H ${{ vars.SSH_HOST }} > ~/.ssh/known_hosts
     - name: run script
       run: |
+        ls
         cat messages.txt
         #cat messages.txt | ssh ${{ secrets.SSH_USER }}@${{ vars.SSH_HOST }} "/sbin/sendmail -t saillantnicolas01@gmail.com"
