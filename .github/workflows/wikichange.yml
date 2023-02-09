@@ -10,18 +10,13 @@ jobs:
     - name: Obtenir la réponse de l'API
       id: response
       run: |
-        response=$(curl -s https://api.github.com/repos/saillantnicolas/testaction/events)
-        delimiter="$(openssl rand -hex 8)"
-              echo "response<<${delimiter}" >> "${GITHUB_OUTPUT}"
-              echo $response >> "${GITHUB_OUTPUT}"
-              echo "${delimiter}" >> "${GITHUB_OUTPUT}"
+        response=$(curl -s https://api.github.com/repos/saillantnicolas/testaction/events) >> response.json
 
     - name: Déterminer le nombre d'événements
       id: event_count
       run: |
-        echo ("${{ steps.response.outputs.response }}")
-        #eventcount=$(echo "${{ steps.response.outputs.response }}" | jq '. | length')
-        #echo "eventcount=$eventcount" >> $GITHUB_OUTPUT
+        eventcount=$(cat response.json | jq '. | length')
+        echo "eventcount=$eventcount" >> $GITHUB_OUTPUT
 
     - name: Boucle pour traiter les événements
       id: event
