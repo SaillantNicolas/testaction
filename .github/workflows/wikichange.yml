@@ -34,6 +34,7 @@ jobs:
       id: actor
       run: |
         actor=$(cat event.json | jq '.actor.login' | tr -d '"')
+        cat event.json | jq '.actor.login' | tr -d '"'
         echo "actor=$actor" >> $GITUB_OUTPUT
 
     - name: Boucle pour traiter les pages du wiki
