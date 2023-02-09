@@ -35,12 +35,18 @@ jobs:
       run: |
         actor=$(cat event.json | jq '.actor.login' | tr -d '"')
         echo "actor=$actor" >> $GITHUB_OUTPUT
+        
+    - name: Déterminer le nombre de pages
+      id: pages_count
+      run: |
+        pagescount=$(cat event.json | jq '.payload.pages | length')
+        echo "pagescount=$pagescount" >> $GITHUB_OUTPUT
 
     - name: Boucle pour traiter les pages du wiki
       id: messages
       run: |
         date=$(cat event.json | jq '.created_at' | tr -d '"')
-        for ((i=0; i<$(cat event.json | jq  '.payload.pages | length'); i++)); do
+        for ((i=0; i<${{ steps.pages_count.outputs.pagescount }}; i++)); do
           action=$(cat event.json | jq '.payload.pages['$i'].action' | tr -d '"')
           wiki_page=$(cat event.json | jq '.payload.pages['$i'].title' | tr -d '"')
           page_url=$(cat event.json | jq '.payload.pages['$i'].html_url' | tr -d '"')
