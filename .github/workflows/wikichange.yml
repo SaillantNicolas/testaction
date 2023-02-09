@@ -17,7 +17,7 @@ jobs:
       id: event_count
       run: |
         eventcount=$(cat response.json | jq '. | length')
-        echo $eventcount
+        echo ${eventcount}
         echo "eventcount=${echo $eventcount}" >> $GITHUB_OUTPUT
 
     - name: Boucle pour traiter les événements
