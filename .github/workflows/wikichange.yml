@@ -11,7 +11,10 @@ jobs:
       id: response
       run: |
         response=$(curl -s https://api.github.com/repos/saillantnicolas/testaction/events)
-        echo "response=$response" >> $GITHUB_OUTPUT
+        delimiter="$(openssl rand -hex 8)"
+              echo "response<<${delimiter}" >> "${GITHUB_OUTPUT}"
+              echo $response >> "${GITHUB_OUTPUT}"
+              echo "${delimiter}" >> "${GITHUB_OUTPUT}"
 
     - name: Déterminer le nombre d'événements
       id: event_count
