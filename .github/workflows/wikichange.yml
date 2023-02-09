@@ -19,7 +19,7 @@ jobs:
     - name: Déterminer le nombre d'événements
       id: event_count
       run: |
-        eventcount=$(echo "${{ steps.response.outputs.response }}" | jq '. | length')
+        eventcount=$(echo "${{ steps.response.outputs.response }}" | jq '. | length'))
         echo "eventcount=$eventcount" >> $GITHUB_OUTPUT
 
     - name: Boucle pour traiter les événements
