@@ -11,15 +11,14 @@ jobs:
     - name: Obtenir la réponse de l'API
       id: response
       run: |
-        response=$(curl -s https://api.github.com/repos/saillantnicolas/testaction/events) >> response.json
+        curl -s https://api.github.com/repos/saillantnicolas/testaction/events >> response.json
 
     - name: Déterminer le nombre d'événements
       id: event_count
       run: |
         eventcount=$(cat response.json | jq '. | length')
-        ls
-        cat response.json
-        #echo "eventcount=${echo $eventcount}" >> $GITHUB_OUTPUT
+        cat response.json | jq '. | length'
+        #echo "eventcount=$$eventcount" >> $GITHUB_OUTPUT
 
     - name: Boucle pour traiter les événements
       id: event
