@@ -28,12 +28,12 @@ jobs:
             event=$(cat response.json | jq '.[0]')
           fi
         done
-        echo "event=$event" >> $GITHUB_OUTPUT
+        echo $event >> event.json
 
     - name: Obtenir le nom d'utilisateur de l'acteur
       id: actor
       run: |
-        actor=$(echo "${{ steps.event.outputs.event }}" | jq '.actor.login' | tr -d '"')
+        actor=$(cat event.json | jq '.actor.login' | tr -d '"')
         echo "actor=$actor" >> $GITUB_OUTPUT
 
     - name: Boucle pour traiter les pages du wiki
