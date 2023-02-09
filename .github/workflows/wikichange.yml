@@ -22,7 +22,7 @@ jobs:
     - name: Boucle pour traiter les événements
       id: event
       run: |
-        for ((i=${{ steps.event_count.outputs.eventcount }}; i>0; i--)); do
+        for ((i=${{ steps.event_count.outputs.eventcount }}; i>=0; i--)); do
           if [ "$(cat response.json | jq -r '.['$i'].type')" == "GollumEvent" ];
           then
             event=$(cat response.json | jq '.['$i']')
