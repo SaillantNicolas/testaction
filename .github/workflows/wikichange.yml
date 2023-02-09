@@ -57,6 +57,7 @@ jobs:
             "
           messages="$messages$message"
         done
+        echo $messages
         echo $messages >> messages.txt
         
     - name: install ssh keys
