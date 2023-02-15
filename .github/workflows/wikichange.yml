@@ -8,57 +8,33 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Request on API
-      id: response
+    - name: get informations and prepare email
       run: |
-        curl -s https://api.github.com/repos/saillantnicolas/testaction/events >> response.json
-
-    - name: Get event counts
-      id: event_count
-      run: |
-        eventcount=$(cat response.json | jq '. | length')
-        echo "eventcount=$eventcount" >> $GITHUB_OUTPUT
-
-    - name: loop for event
-      run: |
-        for ((i=${{ steps.event_count.outputs.eventcount }}; i>=0; i--)); do
-          if [ "$(cat response.json | jq -r '.['$i'].type')" == "GollumEvent" ];
-          then
-            event=$(cat response.json | jq '.['$i']')
-          fi
+        response=$(curl -s https://api.github.com/repos/saillantnicolas/testaction/events)
+        eventcount=$(echo "$response" | jq '. | length')
+        for ((i=eventcount; i>=0; i--))
+        do
+            if [ "$(echo "$response" | jq -r '.['$i'].type')" == "GollumEvent" ];
+            then
+                event=$(echo "$response" | jq '.['$i']')
+            fi
         done
-        echo $event >> event.json
-
-    - name: Get actor
-      id: actor
-      run: |
-        actor=$(cat event.json | jq '.actor.login' | tr -d '"')
-        echo "actor=$actor" >> $GITHUB_OUTPUT
-        
-    - name: loop for pages
-      id: pages_count
-      run: |
-        pagescount=$(cat event.json | jq '.payload.pages | length')
-        cat event.json | jq '.payload.pages | length'
-        echo "pagescount=$pagescount" >> $GITHUB_OUTPUT
-
-    - name: email construction
-      run: |
-        date=$(cat event.json | jq '.created_at' | tr -d '"')
+        actor=$(echo "$event" | jq '.actor.login' | tr -d '"')
+        count=$(echo "$event" | jq  '.payload.pages | length')
+        date=$(echo "$event" | jq '.created_at' | tr -d '"')
         echo -e "Subject:Wiki Change $date \n" >> messages.txt
-        for ((i=0; i<${{ steps.pages_count.outputs.pagescount }}; i++)); do
-          action=$(cat event.json | jq '.payload.pages['$i'].action' | tr -d '"')
-          wiki_page=$(cat event.json | jq '.payload.pages['$i'].title' | tr -d '"')
-          page_url=$(cat event.json | jq '.payload.pages['$i'].html_url' | tr -d '"')
+        for ((i=0; i<count; i++)); do
+          action=$(echo "$event" | jq '.payload.pages['$i'].action' | tr -d '"')
+          wiki_page=$(echo "$event" | jq '.payload.pages['$i'].title' | tr -d '"')
+          page_url=$(echo "$event" | jq '.payload.pages['$i'].html_url' | tr -d '"')
           echo "Page $i" >> messages.txt
-          echo "Actor : ${{ steps.actor.outputs.actor }}" >> messages.txt
+          echo "Actor : $actor" >> messages.txt
           echo "Action : $action" >> messages.txt
           echo "Wiki Page : $wiki_page" >> messages.txt
           echo "Page URL : $page_url" >> messages.txt
           echo "History : $page_url/_history" >> messages.txt
           echo "Date : $date" >> messages.txt
         done
-        
     - name: install ssh keys
       run: |
         install -m 600 -D /dev/null ~/.ssh/id_rsa
