@@ -66,4 +66,4 @@ jobs:
         ssh-keyscan -H ${{ vars.SSH_HOST }} > ~/.ssh/known_hosts
     - name: send email via ssh
       run: |
-        cat messages.txt | ssh ${{ secrets.SSH_USER }}@${{ vars.SSH_HOST }} "/sbin/sendmail -t saillantnicolas01@gmail.com"
+        cat messages.txt | ssh ${{ secrets.SSH_USER }}@${{ vars.SSH_HOST }} "/sbin/sendmail -t ${{ vars.SEND_EMAIL_TO }}"
