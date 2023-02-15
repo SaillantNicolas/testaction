@@ -8,18 +8,18 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Obtenir la réponse de l'API
+    - name: Request on API
       id: response
       run: |
         curl -s https://api.github.com/repos/saillantnicolas/testaction/events >> response.json
 
-    - name: Déterminer le nombre d'événements
+    - name: Get event counts
       id: event_count
       run: |
         eventcount=$(cat response.json | jq '. | length')
         echo "eventcount=$eventcount" >> $GITHUB_OUTPUT
 
-    - name: Boucle pour traiter les événements
+    - name: loop for event
       run: |
         for ((i=${{ steps.event_count.outputs.eventcount }}; i>=0; i--)); do
           if [ "$(cat response.json | jq -r '.['$i'].type')" == "GollumEvent" ];
@@ -29,20 +29,20 @@ jobs:
         done
         echo $event >> event.json
 
-    - name: Obtenir le nom d'utilisateur de l'acteur
+    - name: Get actor
       id: actor
       run: |
         actor=$(cat event.json | jq '.actor.login' | tr -d '"')
         echo "actor=$actor" >> $GITHUB_OUTPUT
         
-    - name: Déterminer le nombre de pages
+    - name: loop for pages
       id: pages_count
       run: |
         pagescount=$(cat event.json | jq '.payload.pages | length')
         cat event.json | jq '.payload.pages | length'
         echo "pagescount=$pagescount" >> $GITHUB_OUTPUT
 
-    - name: Boucle pour traiter les pages du wiki
+    - name: email construction
       run: |
         date=$(cat event.json | jq '.created_at' | tr -d '"')
         echo -e "Subject:Wiki Change $date \n" >> messages.txt
@@ -55,6 +55,7 @@ jobs:
           echo "Action : $action" >> messages.txt
           echo "Wiki Page : $wiki_page" >> messages.txt
           echo "Page URL : $page_url" >> messages.txt
+          echo "History : $page_url/_History" >> messages.txt
           echo "Date : $date" >> messages.txt
         done
         
@@ -63,6 +64,6 @@ jobs:
         install -m 600 -D /dev/null ~/.ssh/id_rsa
         echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
         ssh-keyscan -H ${{ vars.SSH_HOST }} > ~/.ssh/known_hosts
-    - name: run script
+    - name: send email via ssh
       run: |
         cat messages.txt | ssh ${{ secrets.SSH_USER }}@${{ vars.SSH_HOST }} "/sbin/sendmail -t saillantnicolas01@gmail.com"
