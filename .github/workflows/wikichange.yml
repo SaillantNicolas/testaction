@@ -10,7 +10,7 @@ jobs:
     steps:
     - name: get informations and prepare email
       run: |
-        response=$(curl -s https://api.github.com/repos/saillantnicolas/testaction/events)
+        response=$(curl -s https://api.github.com/repos/cgal/cgal/events)
         eventcount=$(echo "$response" | jq '. | length')
         for ((i=eventcount; i>=0; i--))
         do
