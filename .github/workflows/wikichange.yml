@@ -55,7 +55,7 @@ jobs:
           echo "Action : $action" >> messages.txt
           echo "Wiki Page : $wiki_page" >> messages.txt
           echo "Page URL : $page_url" >> messages.txt
-          echo "History : $page_url/_History" >> messages.txt
+          echo "History : $page_url/_history" >> messages.txt
           echo "Date : $date" >> messages.txt
         done
         
