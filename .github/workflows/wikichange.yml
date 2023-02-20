@@ -15,4 +15,4 @@ jobs:
         result-encoding: string
         script: |
           const payload = context.payload;
-          console.log( payload.sender);
+          console.log( payload );
