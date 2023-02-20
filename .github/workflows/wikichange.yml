@@ -20,7 +20,7 @@ jobs:
           const message = "";
           for (const page of pages){
               message += `\n ${page.action} + ${page.title} + ${page.html_url}`;
-            });
+            };
           return message
     - name: Get result
       run: echo "${{steps.set-result.outputs.result}}"
