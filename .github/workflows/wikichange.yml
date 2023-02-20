@@ -18,10 +18,8 @@ jobs:
           const sender = payload.sender;
           const pages = payload.pages;
           const message = "";
-          pages.forEach(page => {
-          
+          for (const page of pages){
               message += `\n ${page.action} + ${page.title} + ${page.html_url}`;
-              message += `\n- ${page.page_name}`;
             });
           return message
     - name: Get result
