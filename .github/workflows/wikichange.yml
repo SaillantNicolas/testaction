@@ -17,10 +17,12 @@ jobs:
           const payload = context.payload;
           const sender = payload.sender;
           const pages = payload.pages;
-          const action = pages.action;
-          const title = pages.title;
-          const html_url = pages.html_url;
-          const message = sender + action + title + html_url;
+          const message = "";
+          pages.forEach(page => {
+          
+              message += `\n ${page.action} + ${page.title} + ${page.html_url}`;
+              message += `\n- ${page.page_name}`;
+            });
           return message
     - name: Get result
       run: echo "${{steps.set-result.outputs.result}}"
