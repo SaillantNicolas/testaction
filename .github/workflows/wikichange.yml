@@ -15,4 +15,10 @@ jobs:
         result-encoding: string
         script: |
           const payload = context.payload;
-          console.log( payload.pages );
+          const actor = payload.sender.login;
+          const pages = payload.pages;
+          let messages = "";
+          for (const page of pages){
+              messages += "Page ${pages.action} by ${actor} \n";
+          }
+          console.log( messages );
