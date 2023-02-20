@@ -19,6 +19,6 @@ jobs:
           const pages = payload.pages;
           let messages = "";
           for (const page of pages){
-              messages += `Page ${pages.action} by ${actor} \n`;
+              messages += `Page ${payload.pages.title} ${payload.pages.action} by ${actor} \n`;
           }
           console.log( messages );
