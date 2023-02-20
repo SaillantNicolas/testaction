@@ -15,6 +15,4 @@ jobs:
         result-encoding: string
         script: |
           const payload = context.payload;
-          return payload.sender
-    - name: Get result
-      run: echo "${{steps.set-result.outputs.result}}"
+          console.log( payload.sender);
