@@ -1,0 +1,26 @@
+name: Send Email 
+
+on:
+  workflow_dispatch:
+    inputs:
+      message:
+        description: 'Message to send'
+        required: true
+        default: ''
+      email:
+        description: 'Email address to send to'
+        required: true
+        default: ''
+
+jobs:
+  send_email:
+    runs-on: ubuntu-latest
+    steps:
+    - name: install ssh keys
+      run: |
+        install -m 600 -D /dev/null ~/.ssh/id_rsa
+        echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+        ssh-keyscan -H ${{ vars.SSH_HOST }} > ~/.ssh/known_hosts
+    - name: send email via ssh
+      run: |
+        echo ${{ inputs.message }} | ssh  ${{ secrets.SSH_USER }}@${{ vars.SSH_HOST }} "/sbin/sendmail -t ${{ inputs.email }}"
