@@ -23,10 +23,7 @@ jobs:
           }
           console.log( messages );
     - name: call other workflow
-      uses: actions/workflow-dispatch@v2
+      uses: SaillantNicolas/testaction/.github/workflows/send_email.yml@main
       with:
-        workflow: send_email.yml
-        inputs: |
           message: ${{ steps.set-result.outputs.messages }}
           email: saillantnicolas01@gmail.com
-        token: ${{ secrets.GITHUB_TOKEN }}
