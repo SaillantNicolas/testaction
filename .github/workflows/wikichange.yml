@@ -6,7 +6,6 @@ on: [gollum,workflow_dispatch]
 jobs:
   run_script:
     runs-on: ubuntu-latest
-
     steps:
     - name: get informations and prepare email
       uses: actions/github-script@v6
@@ -22,8 +21,8 @@ jobs:
               messages += `Page ${page.title} ${page.action} by ${actor} \n`;
           }
           console.log( messages );
-    - name: call other workflow
-      uses: SaillantNicolas/testaction/.github/workflows/send_email.yml@main
-      with:
-          message: ${{ steps.set-result.outputs.messages }}
-          email: saillantnicolas01@gmail.com
+  call_send_email:
+    uses: SaillantNicolas/testaction/.github/workflows/send_email.yml@main
+    with:
+      message: ${{ needs.run_script.outputs.messages }}
+      email: saillantnicolas01@gmail.com
