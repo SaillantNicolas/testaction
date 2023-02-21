@@ -17,8 +17,16 @@ jobs:
           const payload = context.payload;
           const actor = payload.sender.login;
           const pages = payload.pages;
-          let messages = "";
+          let messages = "Subject:Wiki Change \n";
           for (const page of pages){
               messages += `Page ${page.title} ${page.action} by ${actor} \n`;
           }
           console.log( messages );
+    - name: call other workflow
+      uses: actions/workflow-dispatch@v2
+      with:
+        workflow: send_email.yml
+        inputs: |
+          message: ${{ steps.set-result.outputs.messages }}
+          email: saillantnicolas01@gmail.com
+        token: ${{ secrets.GITHUB_TOKEN }}
