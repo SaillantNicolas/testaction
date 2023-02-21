@@ -1,15 +1,17 @@
 name: Send Email 
 
 on:
-  workflow_dispatch:
+  workflow_call:
     inputs:
       message:
         description: 'Message to send'
         required: true
+        type: string
         default: ''
       email:
         description: 'Email address to send to'
         required: true
+        type: string
         default: ''
 
 jobs:
