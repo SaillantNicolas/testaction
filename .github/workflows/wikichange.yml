@@ -22,10 +22,8 @@ jobs:
           }
           console.log( messages );
   call_send_email:
-    runs-on: ubuntu-latest
     needs: run_script
-    steps:
-      - uses: SaillantNicolas/testaction/.github/workflows/send_email.yml@main
-        with:
-          message: ${{ needs.run_script.outputs.messages }}
-          email: saillantnicolas01@gmail.com
+    uses: SaillantNicolas/testaction/.github/workflows/send_email.yml@main
+    with:
+      message: ${{ needs.run_script.outputs.messages }}
+      email: saillantnicolas01@gmail.com
