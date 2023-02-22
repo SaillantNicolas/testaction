@@ -24,9 +24,6 @@ jobs:
           }
           console.log( messages );
           return messages;
-    - name: tmp
-      run: |
-        echo ${{ steps.set-result.outputs.result }}
   call_send_email:
     needs: run_script
     uses: SaillantNicolas/testaction/.github/workflows/send_email.yml@main
