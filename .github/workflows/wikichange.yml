@@ -18,7 +18,7 @@ jobs:
           const payload = context.payload;
           const actor = payload.sender.login;
           const pages = payload.pages;
-          let messages = "Subject:Wiki Change \n";
+          let messages = "Subject:Cgal wiki has been updated \n";
           for (const page of pages){
               messages += `Page ${page.title} ${page.action} by ${actor} \n`;
           }
