@@ -7,14 +7,14 @@ on:
         description: 'Message to send'
         required: true
         type: string
-        default: ''
       email:
         description: 'Email address to send to'
         required: true
         type: string
-        default: ''
     secrets:
       private_key:
+        required: true
+      user:
         required: true
 
 jobs:
@@ -28,4 +28,4 @@ jobs:
         ssh-keyscan -H ${{ vars.SSH_HOST }} > ~/.ssh/known_hosts
     - name: send email via ssh
       run: |
-        echo "${{ inputs.message }}" | ssh  nsaillant@${{ vars.SSH_HOST }} "/sbin/sendmail -t ${{ inputs.email }}"
+        echo "${{ inputs.message }}" | ssh  ${{ secrets.user }}@${{ vars.SSH_HOST }} "/sbin/sendmail -t ${{ inputs.email }}"
