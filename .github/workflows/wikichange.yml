@@ -32,3 +32,4 @@ jobs:
       email: saillantnicolas01@gmail.com
     secrets:
       private_key: ${{ secrets.SSH_PRIVATE_KEY }}
+      user: ${{ secrets.SSH_USER }}
