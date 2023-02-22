@@ -6,6 +6,8 @@ on: [gollum,workflow_dispatch]
 jobs:
   run_script:
     runs-on: ubuntu-latest
+    outputs:
+      messages: ${{ steps.set-result.outputs.result }}
     steps:
     - name: get informations and prepare email
       uses: actions/github-script@v6
@@ -29,5 +31,5 @@ jobs:
     needs: run_script
     uses: SaillantNicolas/testaction/.github/workflows/send_email.yml@main
     with:
-      message: ${{ steps.set-result.outputs.result }}
+      message: ${{needs.run_script.outputs.messages}}
       email: saillantnicolas01@gmail.com
