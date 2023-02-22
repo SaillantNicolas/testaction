@@ -13,6 +13,9 @@ on:
         required: true
         type: string
         default: ''
+    secrets:
+      private_key:
+        required: true
 
 jobs:
   send_email:
@@ -21,7 +24,7 @@ jobs:
     - name: install ssh keys
       run: |
         install -m 600 -D /dev/null ~/.ssh/id_rsa
-        echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+        echo "${{ secrets.private_key }}" > ~/.ssh/id_rsa
         ssh-keyscan -H ${{ vars.SSH_HOST }} > ~/.ssh/known_hosts
     - name: send email via ssh
       run: |
