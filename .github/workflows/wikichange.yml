@@ -21,9 +21,10 @@ jobs:
               messages += `Page ${page.title} ${page.action} by ${actor} \n`;
           }
           console.log( messages );
+          return messages;
     - name: tmp
       run: |
-        echo ${{ steps.set-result.outputs.messages }}
+        echo ${{ steps.get_pr_number.outputs.result }}
   call_send_email:
     needs: run_script
     uses: SaillantNicolas/testaction/.github/workflows/send_email.yml@main
