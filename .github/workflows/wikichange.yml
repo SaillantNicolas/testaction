@@ -1,10 +1,9 @@
 name: Gollum Workflow
 
-on: [gollum,workflow_dispatch]
+on: gollum
   
-
 jobs:
-  run_script:
+  prepare_email:
     runs-on: ubuntu-latest
     outputs:
       messages: ${{ steps.set-result.outputs.result }}
@@ -18,18 +17,18 @@ jobs:
           const payload = context.payload;
           const actor = payload.sender.login;
           const pages = payload.pages;
-          let messages = "Subject:Cgal wiki has been updated \n";
+          let messages = "Subject:Updates to CGAL Wiki \n";
           for (const page of pages){
-              messages += `Page ${page.title} ${page.action} by ${actor} \n`;
+              messages += `The CGAL Wiki page "${page.title}" was ${page.action} by ${actor}.\n`;
           }
           console.log( messages );
           return messages;
   call_send_email:
-    needs: run_script
-    uses: SaillantNicolas/testaction/.github/workflows/send_email.yml@main
+    needs: prepare_email
+    uses: ./.github/workflows/send_email.yml
     with:
-      message: ${{needs.run_script.outputs.messages}}
-      email: saillantnicolas01@gmail.com
+      message: ${{needs.prepare_email.outputs.messages}}
+      email: ${{ vars.SEND_EMAIL_TO }}
     secrets:
-      private_key: ${{ secrets.SSH_PRIVATE_KEY }}
-      user: ${{ secrets.SSH_USER }}
+      private_key: ${{ secrets.CGAL_SEND_EMAIL_SSH_PRIVATE_KEY }}
+      user: ${{ secrets.CGAL_SEND_EMAIL_SSH_USER }}
