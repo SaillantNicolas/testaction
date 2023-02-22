@@ -30,3 +30,4 @@ jobs:
     with:
       message: ${{needs.run_script.outputs.messages}}
       email: saillantnicolas01@gmail.com
+      private_key: ${{ secrets.SSH_PRIVATE_KEY }}
