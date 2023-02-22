@@ -18,9 +18,6 @@ jobs:
   send_email:
     runs-on: ubuntu-latest
     steps:
-    - name: tmp
-      run: |
-        echo ${{ inputs.message }} ${{ inputs.email }}
     - name: install ssh keys
       run: |
         install -m 600 -D /dev/null ~/.ssh/id_rsa
