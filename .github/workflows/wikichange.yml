@@ -24,10 +24,10 @@ jobs:
           return messages;
     - name: tmp
       run: |
-        echo ${{ steps.get_pr_number.outputs.result }}
+        echo ${{ steps.set-result.outputs.result }}
   call_send_email:
     needs: run_script
     uses: SaillantNicolas/testaction/.github/workflows/send_email.yml@main
     with:
-      message: ${{ needs.run_script.outputs.messages }}
+      message: ${{ steps.set-result.outputs.result }}
       email: saillantnicolas01@gmail.com
