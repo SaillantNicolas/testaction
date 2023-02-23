@@ -15,7 +15,7 @@ jobs:
         result-encoding: string
         script: |
           const payload = context.payload;
-          const actor = payload.sender.url;
+          const actor = payload.sender.html_url;
           const pages = payload.pages;
           let messages = "Subject:Updates to CGAL Wiki \n";
           messages += `The following CGAL Wiki page were modified by "${actor}"\n`
