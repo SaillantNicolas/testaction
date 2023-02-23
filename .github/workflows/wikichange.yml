@@ -18,7 +18,7 @@ jobs:
           const actor = payload.sender.url;
           const pages = payload.pages;
           let messages = "Subject:Updates to CGAL Wiki \n";
-          messages += `The following CGAL Wiki page were modified by "${actor}"`
+          messages += `The following CGAL Wiki page were modified by "${actor}"\n`
           for (const page of pages){
               messages += `"${page.html_url} ${page.title}"\n`;
           }
