@@ -17,7 +17,7 @@ jobs:
           const payload = context.payload;
           const actor = payload.sender.html_url;
           const pages = payload.pages;
-          let messages = "Subject:Updates to CGAL Wiki \nContent-Type: text/html";
+          let messages = "Subject:Updates to CGAL Wiki \nContent-Type: text/html\n";
           messages += "<html><body>";
           messages += `<p>The following CGAL Wiki page were modified by "${actor}"</p><br>`
           for (const page of pages){
