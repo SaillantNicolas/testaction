@@ -15,11 +15,11 @@ jobs:
         result-encoding: string
         script: |
           const payload = context.payload;
-          const actor = payload.sender.html_url;
+          const actor = payload.sender;
           const pages = payload.pages;
           let messages = "Subject:Updates to CGAL Wiki \nContent-Type: text/html\n";
           messages += "<html><body>";
-          messages += `<p>The following CGAL Wiki page were modified by "${actor}"</p><br>`
+          messages += `<p>The following CGAL Wiki page were modified by <a href="${actor.html_url}">"${actor.login}"</a></p><br>`
           for (const page of pages){
               messages += `<p><a href="${page.html_url}"> ${page.title}</a></p>\n`;
           }
