@@ -13,6 +13,6 @@
           with:
             script: |
               const payload = context.payload
-              console.log(context);
+              console.log(context.runId);
               
          
