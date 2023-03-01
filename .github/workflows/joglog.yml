@@ -1,0 +1,19 @@
+  name: joblog
+  on: push
+  jobs:
+    joblog:
+      runs-on: ubuntu-latest
+      steps:
+        - name: error
+          run : |
+            exit 1
+        - name: get joblog
+          if: ${{ failure() }}
+          uses: actions/github-script@v6
+          with:
+            script: |
+              const payload = context.payload
+              console.log("payload : " + payload);
+              console.log("contexte : " + context);
+              
+         
