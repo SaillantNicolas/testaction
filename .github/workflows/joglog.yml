@@ -13,7 +13,7 @@
           with:
             script: |
               const payload = context.payload
-              const url = `https://github.com/SaillantNicolas/testaction/actions/runs/"${context.runId}"`
+              const url = `https://github.com/SaillantNicolas/testaction/actions/runs/${context.runId}`
               console.log(url);
               
          
