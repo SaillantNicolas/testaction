@@ -19,11 +19,11 @@ jobs:
           const pages = payload.pages;
           let messages = "Subject:Updates to CGAL Wiki \nContent-Type: text/html\n";
           messages += "<html><body>";
-          messages += `<p>The following CGAL Wiki page were modified by <a href="${actor.html_url}">"${actor.login}"</a></p><br>`
+          messages += `<p>The following CGAL Wiki page were modified by <a href="${actor.html_url}">"${actor.login}"</a></p><br><ul>`
           for (const page of pages){
-              messages += `<p><a href="${page.html_url}"> ${page.title}</a></p>\n`;
+              messages += `<li><a href="${page.html_url}"> ${page.title}</a></li>\n`;
           }
-          messages += "</body></html>";
+          messages += "</ul></body></html>";
           console.log( messages );
           return messages;
   call_send_email:
