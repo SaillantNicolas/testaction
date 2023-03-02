@@ -1,5 +1,7 @@
   name: List workflow last run
   on: workflow_dispatch
+  env:
+    GH_TOKEN: ${{ github.token }}
   jobs:
     list_workflow:
       runs-on: ubuntu-latest
