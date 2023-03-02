@@ -13,7 +13,9 @@
             chmod +x ./Scripts/developer_scripts/list_cgal_workflows_last_run.sh
             ./Scripts/developer_scripts/list_cgal_workflows_last_run.sh > output.md
         - name: convert markdown to html
-          run: pandoc -f markdown -t html -o output.html output.md
+          run: |
+            sudo apt-get update && sudo apt-get install -y pandoc
+            pandoc -f markdown -t html -o output.html output.md
         - name: tmp
           run: cat output.html
     call_send_email:
