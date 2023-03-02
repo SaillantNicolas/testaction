@@ -1,5 +1,4 @@
   name: joblog
-  on: push
   jobs:
     joblog:
       runs-on: ubuntu-latest
