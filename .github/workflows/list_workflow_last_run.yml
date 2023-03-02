@@ -16,7 +16,7 @@
       needs: list_workflow
       uses: ./.github/workflows/send_email.yml
       with:
-        message: ${{ cat output.md }}
+        message: $(cat output.md)
       secrets:
         email: ${{ secrets.CGAL_SEND_WIKI_EMAIL_TO }}
         private_key: ${{ secrets.CGAL_SEND_WIKI_EMAIL_SSH_PRIVATE_KEY }}
