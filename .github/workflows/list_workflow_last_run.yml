@@ -12,11 +12,15 @@
           run: |
             chmod +x ./Scripts/developer_scripts/list_cgal_workflows_last_run.sh
             ./Scripts/developer_scripts/list_cgal_workflows_last_run.sh > output.md
+        - name: convert markdown to html
+          run: pandoc -f markdown -t html -o output.html output.md
+        - name: tmp
+          run: cat output.html
     call_send_email:
       needs: list_workflow
       uses: ./.github/workflows/send_email.yml
       with:
-        message: $(cat output.md)
+        message: test
       secrets:
         email: ${{ secrets.CGAL_SEND_WIKI_EMAIL_TO }}
         private_key: ${{ secrets.CGAL_SEND_WIKI_EMAIL_SSH_PRIVATE_KEY }}
