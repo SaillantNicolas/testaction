@@ -26,6 +26,7 @@ jobs:
           messages += "</ul></body></html>";
           console.log( messages );
           return messages;
+          
   call_send_email:
     needs: prepare_email
     uses: ./.github/workflows/send_email.yml
