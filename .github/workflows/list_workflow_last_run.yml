@@ -23,7 +23,9 @@
           run: |
             delimiter="$(openssl rand -hex 8)"
               echo "message<<${delimiter}" >> "${GITHUB_OUTPUT}"
+              echo "<html><body>" >> "${GITHUB_OUTPUT}"
               cat output.html >> "${GITHUB_OUTPUT}"
+              echo "</html></body> >> "${GITHUB_OUTPUT}"
               echo "${delimiter}" >> "${GITHUB_OUTPUT}"          
     call_send_email:
       needs: list_workflow
