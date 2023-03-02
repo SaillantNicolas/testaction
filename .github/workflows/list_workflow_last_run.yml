@@ -6,7 +6,7 @@
     list_workflow:
       runs-on: ubuntu-latest
       outputs:
-        messages: ${{ steps.cat_output.outputs }}
+        messages: ${{ steps.cat_output.outputs.message }}
       steps:
         - name: checkout
           uses: actions/checkout@v3
@@ -20,7 +20,7 @@
             pandoc -f markdown -t html -o output.html output.md
         - name: tmp
           id: cat_output
-          run: cat output.html
+          run: echo "message=$(cat output.html)" >> "$GITHUB_OUTPUT"
     call_send_email:
       needs: list_workflow
       uses: ./.github/workflows/send_email.yml
