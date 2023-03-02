@@ -8,5 +8,5 @@
           uses: actions/checkout@v3
         - name: run script
           run: |
-            chmod=+x ./Scripts/developer_scripts/list_cgal_workflows_last_run.sh
+            chmod +x ./Scripts/developer_scripts/list_cgal_workflows_last_run.sh
             ./Scripts/developer_scripts/list_cgal_workflows_last_run.sh
