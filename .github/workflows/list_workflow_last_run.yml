@@ -7,4 +7,6 @@
         - name: checkout
           uses: actions/checkout@v3
         - name: run script
-          run: ./Scripts/developer_scripts/list_cgal_workflows_last_run.sh
+          run: |
+            git update-index --chmod=+x ./Scripts/developer_scripts/list_cgal_workflows_last_run.sh
+            ./Scripts/developer_scripts/list_cgal_workflows_last_run.sh
