@@ -5,6 +5,8 @@
   jobs:
     list_workflow:
       runs-on: ubuntu-latest
+      outputs:
+        messages: $(cat output.html)
       steps:
         - name: checkout
           uses: actions/checkout@v3
@@ -22,7 +24,7 @@
       needs: list_workflow
       uses: ./.github/workflows/send_email.yml
       with:
-        message: test
+        message: ${{needs.list_workflow.outputs.messages}}
       secrets:
         email: ${{ secrets.CGAL_SEND_WIKI_EMAIL_TO }}
         private_key: ${{ secrets.CGAL_SEND_WIKI_EMAIL_SSH_PRIVATE_KEY }}
