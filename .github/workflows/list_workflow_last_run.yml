@@ -2,7 +2,7 @@
   on: 
     workflow_dispatch:
     schedule:
-      - cron: "0 8 * * 1-5"
+      - cron: "0 09 * * 1-5"
   env:
     GH_TOKEN: ${{ github.token }}
   jobs:
