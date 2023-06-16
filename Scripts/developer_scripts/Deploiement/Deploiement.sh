@@ -1,8 +1,10 @@
 #!/bin/bash
+CGAL_ROOT=$PWD
 CGAL_GITREPO=""
 CGAL_PURCHASED_VERSION=""
 CGAL_VERSION=""
 CGAL_RELEASE_COMMIT=""
+CGAL_PACKAGE=()
 CGAL_CHECK()
 {
   echo "Final Check"
@@ -59,13 +61,35 @@ CGAL_GET_COMMIT()
 # Function to create partial release
 CGAL_PARTIAL_RELEASE()
 {
+  rsync -a --exclude='data' --exclude='demo' --exclude='test' --exclude='include/CGAL/*' --include='include/CGAL' --exclude='package_info/*' --include='package_info' "tmp/CGAL-$CGAL_VERSION/" "result/CGAL-$CGAL_VERSION"
+  CGAL_INCLUDE="tmp/CGAL-$CGAL_VERSION/include/CGAL/"
+  cd $CGAL_INCLUDE
   echo -e "PARTIAL_RELEASE"
+  file=$(find . -maxdepth 1 -type f | sed 's|^\./||')
+  for directories in "${CGAL_PACKAGE[@]}"
+  do
+      directory=$(find . -iname "$directories" -type d | sed 's|^\./||')
+      cp -rf $directory $CGAL_ROOT/result/CGAL-$CGAL_VERSION/include/CGAL/$directory
+      cp -rf ../../package_info/$directory $CGAL_ROOT/result/CGAL-$CGAL_VERSION/package_info/$directory
+      for f in $file
+      do
+          if grep -q "#include <CGAL/license/$directory.h>" $f; then
+              cp $f $CGAL_ROOT/result/CGAL-$CGAL_VERSION/include/CGAL
+          fi
+      done
+  done
+  cd $CGAL_ROOT
+  cp $1 result/CGAL-$CGAL_VERSION/include/CGAL/$1
+  echo " ----------------------- "
 }
 # Function to create full release
 CGAL_FULL_RELEASE()
 {
   echo -e "FULL_RELEASE"
   cp -rf tmp/CGAL-$CGAL_VERSION result/CGAL-$CGAL_VERSION
+  rm result/CGAL-$CGAL_VERSION/include/CGAL/$1
+  cp $1 result/CGAL-$CGAL_VERSION/include/CGAL/$1
+  sed -i "s,\$URL,\$URL https://github.com/CGAL/cgal/tree/v$CGAL_VERSION ,g" result/CGAL-$CGAL_VERSION/include/CGAL/$1
 }
 if [[ $# -eq 0 ]]; then
   echo "No arguments provided"
@@ -86,6 +110,11 @@ fi
 if [[ ! -d "repo" ]]; then
   mkdir repo
 fi
+#if [[ ! -d "result/CGAL-$CGAL_VERSION" ]]; then
+#  mkdir result/CGAL-$CGAL_VERSION
+#  mkdir result/CGAL-$CGAL_VERSION/include
+#  mkdir result/CGAL-$CGAL_VERSION/include/CGAL
+#fi
 # Clone CGAL repo
 CGAL_CLONE
 # Create CGAL release
@@ -97,36 +126,24 @@ else
 fi
 # Get Release type
 CGAL_RELEASE_TYPE=$(grep "TARBALL_TYPE" $1 | awk '{print $3}')
-echo " ----------------------- "
 # Get CGAL packages
-CGAL_PACKAGE=()
-echo -e "CGAL PACKAGES :"
 while read -r line; do
   if [[ "$line" == *CGAL_*_LICENSE* ]]; then
-    echo $line | awk '{print "\t--"$2}' | sed -e 's/CGAL_//' -e 's/_COMMERCIAL//' -e 's/_LICENSE//'
-    echo $line | awk '{print "\t--"$2}'
-    CGAL_PACKAGE+=("$(echo "$line" | awk '{print $2}')")
-    echo ""
+    CGAL_PACKAGE+=("$(echo "$line" | sed -e 's/CGAL_//' -e 's/_COMMERCIAL//' -e 's/_LICENSE//' | awk '{print $2}')")
   fi
 done < "$1"
-for PKG in "${CGAL_PACKAGE[@]}";do
-  echo -e "\t-- $PKG"
-done
 echo " ----------------------- "
 if [[ "$CGAL_RELEASE_TYPE" == "PARTIAL_RELEASE" ]]; then
-  CGAL_PARTIAL_RELEASE
+  CGAL_PARTIAL_RELEASE $1
 elif [[ "$CGAL_RELEASE_TYPE" == "FULL_RELEASE" ]]; then
-  CGAL_FULL_RELEASE
+  CGAL_FULL_RELEASE $1
 else
   echo "TARBALL_TYPE not valid."
 fi
-rm result/CGAL-$CGAL_VERSION/include/CGAL/$1
-cp $1 result/CGAL-$CGAL_VERSION/include/CGAL/$1
-sed -i "s,\$URL,\$URL https://github.com/CGAL/cgal/tree/v$CGAL_VERSION ,g" result/CGAL-$CGAL_VERSION/include/CGAL/$1
 echo "taring result/"
 tar -czf result/cgal-$CGAL_VERSION.tar.gz result/CGAL-$CGAL_VERSION
 echo " ----------------------- "
-CGAL_CHECK result/CGAL-$CGAL_VERSION/include/CGAL/$1
+#CGAL_CHECK result/CGAL-$CGAL_VERSION/include/CGAL/$1
 echo "Cleaning"
 echo -e "\t-- removing result/CGAL-$CGAL_VERSION"
-rm -rf result/CGAL-$CGAL_VERSION
+#rm -rf result/CGAL-$CGAL_VERSION
