@@ -61,22 +61,46 @@ CGAL_GET_COMMIT()
 # Function to create partial release
 CGAL_PARTIAL_RELEASE()
 {
-  rsync -a --exclude='data' --exclude='demo' --exclude='test' --exclude='include/CGAL/*' --include='include/CGAL' --exclude='package_info/*' --include='package_info' "tmp/CGAL-$CGAL_VERSION/" "result/CGAL-$CGAL_VERSION"
-  CGAL_INCLUDE="tmp/CGAL-$CGAL_VERSION/include/CGAL/"
-  cd $CGAL_INCLUDE
-  echo -e "PARTIAL_RELEASE"
-  file=$(find . -maxdepth 1 -type f | sed 's|^\./||')
-  for directories in "${CGAL_PACKAGE[@]}"
+  rsync -a --exclude='data' --exclude='demo' --exclude='test' --exclude='examples' --exclude='include/CGAL/*' --include='include/CGAL' --exclude='package_info/*' --include='package_info' "tmp/CGAL-$CGAL_VERSION/" "result/CGAL-$CGAL_VERSION"
+  cd tmp/CGAL-$CGAL_VERSION/include/CGAL
+  cp config.h "$CGAL_ROOT/result/CGAL-$CGAL_VERSION/include/CGAL/config.h"
+  file=$(find . -type f | sed 's|^\./||')
+  for pkg in "${CGAL_PACKAGE[@]}"
   do
-      directory=$(find . -iname "$directories" -type d | sed 's|^\./||')
-      cp -rf $directory $CGAL_ROOT/result/CGAL-$CGAL_VERSION/include/CGAL/$directory
-      cp -rf ../../package_info/$directory $CGAL_ROOT/result/CGAL-$CGAL_VERSION/package_info/$directory
-      for f in $file
+    if [[ $pkg == "POLYGON_MESH_PROCESSING_"* ]];then
+      cp -rf ../../package_info/Polygon_mesh_processing $CGAL_ROOT/result/CGAL-$CGAL_VERSION/package_info/Polygon_mesh_processing
+      cd license/Polygon_mesh_processing
+      pmp=$(find . -type f | sed 's|^\./||')
+      for f in $pmp
       do
-          if grep -q "#include <CGAL/license/$directory.h>" $f; then
-              cp $f $CGAL_ROOT/result/CGAL-$CGAL_VERSION/include/CGAL
-          fi
+        if grep -iq "$pkg\_" $f; then
+          pkg=$(echo "Polygon_mesh_processing/$f" | sed 's|\.h||')
+        fi
       done
+      cd ../../
+    else
+      directory=$(find . -iname "$pkg" -type d | sed 's|^\./||')
+      cp -rf ../../package_info/$directory $CGAL_ROOT/result/CGAL-$CGAL_VERSION/package_info/$directory
+    fi
+    echo $pkg
+    for f in $file
+    do
+      if grep -iq "#include <CGAL/license/$pkg.h>" $f; then
+        parent_dir=$(dirname "$f")
+        dest_dir="$CGAL_ROOT/result/CGAL-$CGAL_VERSION/include/CGAL/$parent_dir"
+        mkdir -p "$dest_dir"
+        cp "$f" "$dest_dir"
+      fi
+    done
+  done
+  for f in $file
+  do
+    if ! grep -iq "#include <CGAL/license/ *" $f; then
+      parent_dir=$(dirname "$f")
+      dest_dir="$CGAL_ROOT/result/CGAL-$CGAL_VERSION/include/CGAL/$parent_dir"
+      mkdir -p "$dest_dir"
+      cp "$f" "$dest_dir"
+    fi
   done
   cd $CGAL_ROOT
   cp $1 result/CGAL-$CGAL_VERSION/include/CGAL/$1
@@ -110,11 +134,6 @@ fi
 if [[ ! -d "repo" ]]; then
   mkdir repo
 fi
-#if [[ ! -d "result/CGAL-$CGAL_VERSION" ]]; then
-#  mkdir result/CGAL-$CGAL_VERSION
-#  mkdir result/CGAL-$CGAL_VERSION/include
-#  mkdir result/CGAL-$CGAL_VERSION/include/CGAL
-#fi
 # Clone CGAL repo
 CGAL_CLONE
 # Create CGAL release
