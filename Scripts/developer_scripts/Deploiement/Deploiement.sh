@@ -1,10 +1,14 @@
 #!/bin/bash
+# TODO
+# license.h CUSTOMER_NAME Attention espace dans le nom du client
+
 CGAL_ROOT=$PWD
 CGAL_GITREPO=""
 CGAL_PURCHASED_VERSION=""
 CGAL_VERSION=""
 CGAL_RELEASE_COMMIT=""
 CGAL_PACKAGE=()
+CUSTOMER_NAME=""
 CGAL_CHECK()
 {
   echo "Final Check"
@@ -61,14 +65,14 @@ CGAL_GET_COMMIT()
 # Function to create partial release
 CGAL_PARTIAL_RELEASE()
 {
-  rsync -a --exclude='data' --exclude='demo' --exclude='test' --exclude='examples' --exclude='include/CGAL/*' --include='include/CGAL' --exclude='package_info/*' --include='package_info' "tmp/CGAL-$CGAL_VERSION/" "result/CGAL-$CGAL_VERSION"
-  cd tmp/CGAL-$CGAL_VERSION/include/CGAL
-  cp config.h "$CGAL_ROOT/result/CGAL-$CGAL_VERSION/include/CGAL/config.h"
+  rsync -a --exclude='developer_scripts' --exclude='data' --exclude='demo' --exclude='test' --exclude='examples' --exclude='include/CGAL/*' --include='include/CGAL' --exclude='package_info/*' --include='package_info' "Release/CGAL-$CGAL_VERSION/" "RESULT/CGAL-$CGAL_VERSION"
+  cd Release/CGAL-$CGAL_VERSION/include/CGAL
+  cp config.h "$CGAL_ROOT/RESULT/CGAL-$CGAL_VERSION/include/CGAL/config.h"
   file=$(find . -type f | sed 's|^\./||')
   for pkg in "${CGAL_PACKAGE[@]}"
   do
     if [[ $pkg == "POLYGON_MESH_PROCESSING_"* ]];then
-      cp -rf ../../package_info/Polygon_mesh_processing $CGAL_ROOT/result/CGAL-$CGAL_VERSION/package_info/Polygon_mesh_processing
+      cp -rf ../../package_info/Polygon_mesh_processing $CGAL_ROOT/RESULT/CGAL-$CGAL_VERSION/package_info/Polygon_mesh_processing
       cd license/Polygon_mesh_processing
       pmp=$(find . -type f | sed 's|^\./||')
       for f in $pmp
@@ -80,14 +84,14 @@ CGAL_PARTIAL_RELEASE()
       cd ../../
     else
       directory=$(find . -iname "$pkg" -type d | sed 's|^\./||')
-      cp -rf ../../package_info/$directory $CGAL_ROOT/result/CGAL-$CGAL_VERSION/package_info/$directory
+      cp -rf ../../package_info/$directory $CGAL_ROOT/RESULT/CGAL-$CGAL_VERSION/package_info/$directory
     fi
     echo $pkg
     for f in $file
     do
       if grep -iq "#include <CGAL/license/$pkg.h>" $f; then
         parent_dir=$(dirname "$f")
-        dest_dir="$CGAL_ROOT/result/CGAL-$CGAL_VERSION/include/CGAL/$parent_dir"
+        dest_dir="$CGAL_ROOT/RESULT/CGAL-$CGAL_VERSION/include/CGAL/$parent_dir"
         mkdir -p "$dest_dir"
         cp "$f" "$dest_dir"
       fi
@@ -97,23 +101,23 @@ CGAL_PARTIAL_RELEASE()
   do
     if ! grep -iq "#include <CGAL/license/ *" $f; then
       parent_dir=$(dirname "$f")
-      dest_dir="$CGAL_ROOT/result/CGAL-$CGAL_VERSION/include/CGAL/$parent_dir"
+      dest_dir="$CGAL_ROOT/RESULT/CGAL-$CGAL_VERSION/include/CGAL/$parent_dir"
       mkdir -p "$dest_dir"
       cp "$f" "$dest_dir"
     fi
   done
   cd $CGAL_ROOT
-  cp $1 result/CGAL-$CGAL_VERSION/include/CGAL/$1
+  cp $1 RESULT/CGAL-$CGAL_VERSION/include/CGAL/license.h
   echo " ----------------------- "
 }
 # Function to create full release
 CGAL_FULL_RELEASE()
 {
   echo -e "FULL_RELEASE"
-  cp -rf tmp/CGAL-$CGAL_VERSION result/CGAL-$CGAL_VERSION
-  rm result/CGAL-$CGAL_VERSION/include/CGAL/$1
-  cp $1 result/CGAL-$CGAL_VERSION/include/CGAL/$1
-  sed -i "s,\$URL,\$URL https://github.com/CGAL/cgal/tree/v$CGAL_VERSION ,g" result/CGAL-$CGAL_VERSION/include/CGAL/$1
+  cp -rf Release/CGAL-$CGAL_VERSION RESULT/CGAL-$CGAL_VERSION
+  rm RESULT/CGAL-$CGAL_VERSION/include/CGAL/license.h
+  cp $1 RESULT/CGAL-$CGAL_VERSION/include/CGAL/license.h
+  sed -i "s,\$URL,\$URL https://github.com/CGAL/cgal/tree/v$CGAL_VERSION ,g" RESULT/CGAL-$CGAL_VERSION/include/CGAL/license.h
 }
 if [[ $# -eq 0 ]]; then
   echo "No arguments provided"
@@ -125,11 +129,11 @@ fi
 CGAL_GET_VERSION $1
 CGAL_GET_COMMIT
 # Create directories
-if [[ ! -d "tmp" ]]; then
-  mkdir tmp
+if [[ ! -d "Release" ]]; then
+  mkdir Release
 fi
-if [[ ! -d "result" ]]; then
-  mkdir result
+if [[ ! -d "RESULT" ]]; then
+  mkdir RESULT
 fi
 if [[ ! -d "repo" ]]; then
   mkdir repo
@@ -137,14 +141,15 @@ fi
 # Clone CGAL repo
 CGAL_CLONE
 # Create CGAL release
-if [[ ! -d "tmp/CGAL-$CGAL_VERSION" ]]; then
+if [[ ! -d "Release/CGAL-$CGAL_VERSION" ]]; then
   echo "Creating CGAL release"
-  cmake -DGIT_REPO=$CGAL_GITREPO -DDESTINATION=tmp -DCGAL_VERSION=$CGAL_VERSION -DCGAL_VERSION_NR=$CGAL_PURCHASED_VERSION -DVERBOSE="ON" -P $CGAL_GITREPO/Scripts/developer_scripts/cgal_create_release_with_cmake.cmake
+  cmake -DGIT_REPO=$CGAL_GITREPO -DDESTINATION=Release -DCGAL_VERSION=$CGAL_VERSION -DCGAL_VERSION_NR=$CGAL_PURCHASED_VERSION -DVERBOSE="ON" -P $CGAL_GITREPO/Scripts/developer_scripts/cgal_create_release_with_cmake.cmake
 else
   echo "CGAL release already created"
 fi
 # Get Release type
 CGAL_RELEASE_TYPE=$(grep "TARBALL_TYPE" $1 | awk '{print $3}')
+CUSTOMER_NAME=$(grep "CUSTOMER_NAME" $1 | awk '{print $3}')
 # Get CGAL packages
 while read -r line; do
   if [[ "$line" == *CGAL_*_LICENSE* ]]; then
@@ -152,6 +157,8 @@ while read -r line; do
   fi
 done < "$1"
 echo " ----------------------- "
+echo "$CGAL_RELEASE_TYPE"
+echo "if [[ $CGAL_RELEASE_TYPE == "PARTIAL_RELEASE" ]]; then"
 if [[ "$CGAL_RELEASE_TYPE" == "PARTIAL_RELEASE" ]]; then
   CGAL_PARTIAL_RELEASE $1
 elif [[ "$CGAL_RELEASE_TYPE" == "FULL_RELEASE" ]]; then
@@ -159,10 +166,31 @@ elif [[ "$CGAL_RELEASE_TYPE" == "FULL_RELEASE" ]]; then
 else
   echo "TARBALL_TYPE not valid."
 fi
-echo "taring result/"
-tar -czf result/cgal-$CGAL_VERSION.tar.gz result/CGAL-$CGAL_VERSION
+echo "taring RESULT/"
+tar -czf RESULT/cgal-$CGAL_VERSION.tar.gz RESULT/CGAL-$CGAL_VERSION
 echo " ----------------------- "
-#CGAL_CHECK result/CGAL-$CGAL_VERSION/include/CGAL/$1
-echo "Cleaning"
-echo -e "\t-- removing result/CGAL-$CGAL_VERSION"
-#rm -rf result/CGAL-$CGAL_VERSION
+#CGAL_CHECK RESULT/CGAL-$CGAL_VERSION/include/CGAL/license.h
+
+
+
+#echo "Cleaning"
+#echo -e "\t-- removing RESULT/CGAL-$CGAL_VERSION"
+#rm -rf RESULT/CGAL-$CGAL_VERSION
+echo "Pushing to CodeBasehq"
+cd RESULT/CGAL-$CGAL_VERSION
+#git init > /dev/null 2>&1
+echo $CUSTOMER_NAME
+if [[ ! `git branch --list CGAL-$CGAL_VERSION` ]]; then
+  echo "Creating branch"
+  git checkout -b CGAL-$CGAL_VERSION
+else
+  echo "Branch already exists"
+  git switch CGAL-$CGAL_VERSION
+fi
+git add . > /dev/null 2>&1
+git commit -m "CGAL-$CGAL_VERSION" > /dev/null 2>&1
+git remote add codebase git@codebasehq.com:geometryfactory/$CUSTOMER_NAME/deployment.git
+#git push codebase CGAL-$CGAL_VERSION
+git remote remove codebase
+#git push --set-upstream codebase CGAL-$CGAL_VERSION
+git switch Deploiement
